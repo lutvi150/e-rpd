@@ -11,17 +11,18 @@
 
     <title><?=getenv('app_name')?></title>
 
-    <!-- Bootstrap -->
-    <link href="<?=base_url()?>/assets/theme/gentella/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="<?=base_url()?>/assets/theme/gentella/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="<?=base_url()?>/assets/theme/gentella/vendors/nprogress/nprogress.css" rel="stylesheet">
-    <!-- iCheck -->
-
-
-    <!-- Custom Theme Style -->
-    <link href="<?=base_url()?>/assets/theme/gentella/build/css/custom.min.css" rel="stylesheet">
+     <!-- Bootstrap -->
+     <link href="<?=base_url()?>/assets/theme/gentella/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+     <!-- Font Awesome -->
+     <link href="<?=base_url()?>/assets/theme/gentella/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+     <!-- NProgress -->
+     <link href="<?=base_url()?>/assets/theme/gentella/vendors/nprogress/nprogress.css" rel="stylesheet">
+     
+     <!-- bootstrap-daterangepicker -->
+     <link href="<?=base_url()?>/assets/theme/gentella/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+ 
+     <!-- Custom Theme Style -->
+     <link href="<?=base_url()?>/assets/theme/gentella/build/css/custom.min.css" rel="stylesheet">
 </head>
 
 <body class="nav-md">
@@ -105,7 +106,7 @@
                                     <span class="badge bg-green">6</span>
                                 </a>
                                 <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                                    <li>
+                                    <!-- <li>
                                         <a>
                                             <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
                                             <span>
@@ -164,7 +165,7 @@
                                                 <i class="fa fa-angle-right"></i>
                                             </a>
                                         </div>
-                                    </li>
+                                    </li> -->
                                 </ul>
                             </li>
                         </ul>
@@ -196,8 +197,8 @@
                 <div class="row">
 
 
-                    <div class="col-md-12 col-sm-4 col-xs-12">
-                        <div class="x_panel tile fixed_height_320">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_panel tile ">
                             <div class="x_title">
                                 <h2>Grafik Penarikan Pertahun</h2>
                                 <ul class="nav navbar-right panel_toolbox">
@@ -239,40 +240,63 @@
     </div>
 
     <!-- jQuery -->
-    <script src="<?=base_url()?>/assets/theme/gentella/vendors/jquery-3.6.3/jquery-3.6.3.js"></script>
+    <script src="<?=base_url()?>/assets/theme/gentella/vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
-    <script scr="<?=base_url()?>/assets/theme/gentella/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="<?=base_url()?>/assets/theme/gentella/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- FastClick -->
-    <script scr="<?=base_url()?>/assets/theme/gentella/vendors/fastclick/lib/fastclick.js"></script>
-    <!-- chart js -->
-    <script src="<?=base_url()?>assets/theme/gentella/vendors/Chart.js/dist/Chart.js"></script>
+    <script src="<?=base_url()?>/assets/theme/gentella/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="<?=base_url()?>/assets/theme/gentella/vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+    <script src="<?=base_url()?>/assets/theme/gentella/vendors/Chart.js/dist/Chart.min.js"></script>
+    <!-- bootstrap-progressbar -->
+    <script src="<?=base_url()?>/assets/theme/gentella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- bootstrap-daterangepicker -->
+    <script src="<?=base_url()?>/assets/theme/gentella/vendors/moment/min/moment.min.js"></script>
+    <script src="<?=base_url()?>/assets/theme/gentella/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
     <!-- Custom Theme Scripts -->
-    <script scr="<?=base_url()?>/assets/theme/gentella/build/js/custom.min.js"></script>
+    <script src="<?=base_url()?>/assets/theme/gentella/build/js/custom.min.js"></script>
+    <!-- use for chart js -->
+    <script src="<?=base_url();?>assets/theme/gentella/vendors/Chart.js/dist/Chart.js"></script>
     <script>
         $(document).ready(function () {
             makechart();
         });
         makechart = () => {
-            const ctx = document.getElementById('myChart');
+            var ctx = document.getElementById("myChart");
+		var mybarChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agus", "September",
+					"Oktober",
+					"November", "Desember"
+				],
+				datasets: [{
+					label: 'Jurusan A',
+					backgroundColor: "#26B99A",
+					data: [51, 30, 40, 28, 92, 50, 40, 50, 60, 10, 20, 10]
+				}, {
+					label: 'Jurusan B',
+					backgroundColor: "#03586A",
+					data: [41, 56, 25, 48, 72, 34, 12, 200, 300, 100, 10, 1]
+				}, {
+					label: 'Jurusan C',
+					backgroundColor: "#1019f0",
+					data: [41, 42, , 10, 10, 10, 10, 10, 10, 10, 10, 10]
+				}]
+			},
 
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: [12, 19, 3, 5, 2, 3],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}]
+				}
+			}
+		});
 
         }
     </script>
