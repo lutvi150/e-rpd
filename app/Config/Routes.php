@@ -37,6 +37,8 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::login');
 $routes->get('/login', 'Home::login');
+// administrator
+$routes->group('administrator', []);
 // use for api
 $routes->post('/api/login', 'Home::authorize');
 $routes->get('/dashboard', 'ControllerRpd::dashboard');

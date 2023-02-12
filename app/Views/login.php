@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= getenv('app_name') ?></title>
+    <title><?=getenv('app_name')?></title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/theme/mazer-main/dist/assets/css/bootstrap.css">
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/theme/mazer-main/dist/assets/vendors/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/theme/mazer-main/dist/assets/css/app.css">
-    <link rel="stylesheet" href="<?= base_url() ?>/assets/theme/mazer-main/dist/assets/css/pages/auth.css">
+    <link rel="stylesheet" href="<?=base_url()?>/assets/theme/mazer-main/dist/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="<?=base_url()?>/assets/theme/mazer-main/dist/assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="<?=base_url()?>/assets/theme/mazer-main/dist/assets/css/app.css">
+    <link rel="stylesheet" href="<?=base_url()?>/assets/theme/mazer-main/dist/assets/css/pages/auth.css">
 </head>
 
 <body>
@@ -28,10 +28,10 @@
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
                     <div class="auth-logo">
-                        <a href="#"><img width="100px" src="<?= base_url() ?>/assets/logo/logo.jpg" alt="Logo"></a>
+                        <a href="#"><img width="100px" src="<?=base_url()?>/assets/logo/logo.jpg" alt="Logo"></a>
                     </div>
-                    <h1 class="auth-title">Log in.</h1>
-                    <p class="auth-subtitle mb-5">Selamat datang di <?= getenv('app_name') ?></p>
+                    <h1 class="auth-title">E-RPD </h1>
+                    <p class="auth-subtitle mb-5">Selamat datang di <?=getenv('app_name')?></p>
 
                     <form action="" id="login">
                         <div class="form-group position-relative has-icon-left mb-4">
@@ -77,9 +77,9 @@
 
     </div>
 </body>
-<script src="<?= base_url(); ?>/assets/theme/mazer-main/dist/assets/vendors/jquery/jquery.min.js"></script>
-<script src="<?= base_url(); ?>/assets/others/form-master/dist/jquery.form.min.js"></script>
-<script src="<?= base_url(); ?>/assets/others/sweetalert2-11.6.16/dist/sweetalert2.all.min.js"></script>
+<script src="<?=base_url();?>/assets/theme/mazer-main/dist/assets/vendors/jquery/jquery.min.js"></script>
+<script src="<?=base_url();?>/assets/others/form-master/dist/jquery.form.min.js"></script>
+<script src="<?=base_url();?>/assets/others/sweetalert2-11.6.16/dist/sweetalert2.all.min.js"></script>
 <script>
     $(".btn-login").click(function(e) {
         e.preventDefault();
@@ -96,7 +96,7 @@
         }
         $('#login').ajaxForm({
             type: "POST",
-            url: "<?= base_url('api/login') ?>",
+            url: "<?=base_url('api/login')?>",
             data: data,
             dataType: "JSON",
             success: function(response) {
@@ -109,7 +109,7 @@
                 } else if (response.status == 'user not found') {
                     Swal.fire('Maaf username atau password yang anda gunakan salah');
                 } else if (response.status == 'success') {
-                    window.reload();
+                    location.reload();
                 } else {
                     Swal.fire('Sistem bermasalah');
                 }

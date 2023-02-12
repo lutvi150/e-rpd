@@ -2,13 +2,12 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\API\ResponseTrait;
 use App\Models\ModelUser;
+use CodeIgniter\API\ResponseTrait;
 
 class Home extends BaseController
 {
     use ResponseTrait;
-
 
     public function index()
     {
@@ -16,6 +15,12 @@ class Home extends BaseController
     }
     public function login()
     {
+        $session = \Config\Services::session();
+        if ($session->get('role') == 'administrator') {
+
+        } elseif ($session->get('role') == 'unit') {
+            # code...
+        }
         return view('login');
     }
     public function authorize(Type $var = null)
@@ -33,7 +38,7 @@ class Home extends BaseController
                 ],
                 'password' => [
                     'required' => 'Password tidak boleh kosong',
-                ]
+                ],
             ]
         );
         if (!$validation->withRequest($this->request)->run()) {
