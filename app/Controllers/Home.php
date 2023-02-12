@@ -17,11 +17,12 @@ class Home extends BaseController
     {
         $session = \Config\Services::session();
         if ($session->get('role') == 'administrator') {
-
+            return redirect()->route('administrator');
         } elseif ($session->get('role') == 'unit') {
-            # code...
+            return redirect()->route('unit');
+        } else {
+            return view('login');
         }
-        return view('login');
     }
     public function authorize(Type $var = null)
     {
@@ -72,5 +73,11 @@ class Home extends BaseController
             }
         }
         return $this->respond($response, 200);
+    }
+    public function logout(Type $var = null)
+    {
+        $session = \Config\Services::session();
+        $session->destroy();
+        return redirect()->route('/');
     }
 }

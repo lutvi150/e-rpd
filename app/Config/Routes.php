@@ -37,6 +37,7 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::login');
 $routes->get('/login', 'Home::login');
+$routes->get('/logout', 'Home::logout');
 // administrator
 $routes->group('administrator', function ($routes) {
     $routes->get('/', 'Administrator::index');
