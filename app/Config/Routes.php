@@ -38,7 +38,9 @@ $routes->set404Override();
 $routes->get('/', 'Home::login');
 $routes->get('/login', 'Home::login');
 // administrator
-$routes->group('administrator', []);
+$routes->group('administrator', function ($routes) {
+    $routes->get('/', 'Administrator::index');
+});
 // use for api
 $routes->post('/api/login', 'Home::authorize');
 $routes->get('/dashboard', 'ControllerRpd::dashboard');
