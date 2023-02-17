@@ -41,6 +41,7 @@ $routes->get('/logout', 'Home::logout');
 // administrator
 $routes->group('administrator', function ($routes) {
     $routes->get('/', 'Administrator::index');
+    $routes->get('data-user', 'Administrator::data_user');
 });
 // use for api
 $routes->post('/api/login', 'Home::authorize');

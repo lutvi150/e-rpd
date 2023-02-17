@@ -10,4 +10,8 @@ class Administrator extends BaseController
     {
         return view('rpd/administrator/dashboard');
     }
+    public function data_user(Type $var = null)
+    {
+        return view('rpd/administrator/data_user');
+    }
 }
