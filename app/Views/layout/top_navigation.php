@@ -1,3 +1,5 @@
+
+<?php $session = \Config\Services::session();?>
 <div class="top_nav">
     <div class="nav_menu">
         <nav>
@@ -9,7 +11,12 @@
                 <li class="">
                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown"
                         aria-expanded="false">
-                        <img src="<?=base_url()?>/assets/logo/icon-admin.png" alt="">Admin
+                        <img src="<?=base_url()?>/assets/logo/icon-admin.png" alt="">
+                        <?php if ($session->get('role') == 'admin'): ?>
+                            Admin
+                            <?php else: ?>
+                                <?=$session->get('nama_user');?>
+                                <?php endif;?>
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu pull-right">

@@ -42,6 +42,15 @@ $routes->get('/logout', 'Home::logout');
 $routes->group('administrator', function ($routes) {
     $routes->get('/', 'Administrator::index');
     $routes->get('data-user', 'Administrator::data_user');
+    $routes->post('api/save-data-user', 'Administrator::store_data_user');
+    $routes->get('data-unit', 'Administrator::data_unit');
+    $routes->post('api/save-data-lembaga', 'Administrator::store_data_lembaga');
+    $routes->post('api/delete-data-lembaga', 'Administrator::delete_data_lembaga');
+});
+// use for unit
+$routes->group('unit', function ($routes) {
+    $routes->get('/', 'Unit::index');
+    $routes->get('rpd', 'Unit::rpd');
 });
 // use for api
 $routes->post('/api/login', 'Home::authorize');

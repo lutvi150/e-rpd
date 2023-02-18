@@ -10,14 +10,18 @@ class TableLembaga extends Migration
     {
         $this->forge->addField([
             'id_lembaga' => [
-                'type'           => 'INT',
-                'constraint'     => 5,
-                'unsigned'       => true,
+                'type' => 'INT',
+                'constraint' => 5,
+                'unsigned' => true,
                 'auto_increment' => true,
             ],
             'nama_lembaga' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => '255',
+            ],
+            'id_pengelola' => [
+                'type' => 'INT',
+                'constraint' => 11,
             ],
         ]);
         $this->forge->addKey('id_lembaga', true);
@@ -26,7 +30,7 @@ class TableLembaga extends Migration
 
     public function down()
     {
-        
+
         $this->forge->dropTable('table_lembaga');
     }
 }

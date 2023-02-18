@@ -58,9 +58,9 @@ class Home extends BaseController
                 $newSession = [
                     'login' => true,
                     'email' => $email,
-                    'id' => $data['id'],
-                    'role' => $data['role'],
-                    'nama_user' => $data['nama_user'],
+                    'id' => $data->id,
+                    'role' => $data->role,
+                    'nama_user' => $data->nama_user,
                 ];
                 $session->set($newSession);
                 $response = [

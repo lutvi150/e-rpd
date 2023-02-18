@@ -10,40 +10,40 @@ class TableUser extends Migration
     {
         $this->forge->addField([
             'id' => [
-                'type'           => 'INT',
-                'constraint'     => 5,
-                'unsigned'       => true,
+                'type' => 'INT',
+                'constraint' => 5,
+                'unsigned' => true,
                 'auto_increment' => true,
             ],
             'nama_user' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
             'email' => [
                 'type' => 'VARCHAR',
-                'constraint'=>'255',
-            ],
-            'password' =>[
-                'type' =>'VARCHAR',
                 'constraint' => '255',
             ],
-            'role' =>[
+            'password' => [
                 'type' => 'VARCHAR',
-                'constraint'=>'50'
+                'constraint' => '255',
             ],
-            'last_login' =>[
+            'role' => [
+                'type' => 'VARCHAR',
+                'constraint' => '50',
+            ],
+            'last_login' => [
                 'type' => 'DATETIME',
             ],
-            'created_at'=>[
+            'created_at' => [
                 'type' => 'datetime',
             ],
-            'updated_at'=>[
-                'type'=>'datetime',
-                'null'=>true,
-            ],
-            'delete_at'=>[
+            'updated_at' => [
                 'type' => 'datetime',
-                'null'=>true,
+                'null' => true,
+            ],
+            'deleted_at' => [
+                'type' => 'datetime',
+                'null' => true,
             ],
         ]);
         $this->forge->addKey('id', true);

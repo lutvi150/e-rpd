@@ -1,5 +1,6 @@
 
 <?=$this->include('layout/header')?>
+<?php $session = \Config\Services::session();?>
 <body class="nav-md">
     <div class="container body">
         <div class="main_container">
@@ -19,7 +20,12 @@
                         </div>
                         <div class="profile_info">
                             <span>Selamat Datang,</span>
+                            <?php if ($session->get('role') == 'admin'): ?>
                             <h2>Admin</h2>
+                            <?php else: ?>
+                                <h2>
+                                <?=$session->get('nama_user');?></h2>
+                                <?php endif;?>
                         </div>
                     </div>
                     <!-- /menu profile quick info -->
