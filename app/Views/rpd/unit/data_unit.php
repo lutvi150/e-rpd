@@ -43,9 +43,8 @@
                                         <thead>
                                             <tr>
                                                 <th style="width:1%">No.</th>
-                                                <th>Nama Lembag</th>
-                                                <th>Pengelolaa</th>
-                                                <th>Email</th>
+                                                <th>Nama Lembaga</th>
+                                                <th>Total Pagi</th>
                                                 <th style="width:10%">Aksi</th>
                                             </tr>
                                         </thead>
@@ -54,13 +53,12 @@
                                             <tr>
                                                 <td><?=$key + 1?></td>
                                                 <td><?=$value->nama_lembaga?></td>
-                                                <td><?=$value->nama_user?></td>
-                                                <td><?=$value->email?></td>
+                                                <td>Rp.0</td>
                                                 <td>
-                                                    <button type="button"
-                                                        onclick="delete_data(<?=$value->id_lembaga?>)"
-                                                        class="btn btn-danger btn-xs"><i
-                                                            class="fa fa-trash"></i></button>
+                                                    <a href="<?=base_url('unit/tambah-kegiatan/' . $value->id_lembaga)?>"
+
+                                                        class="btn btn-success btn-xs"><i
+                                                            class="fa fa-plus"></i> Tambah Kegiatan</a>
                                                 </td>
                                             </tr>
                                             <?php endforeach;?>
@@ -78,39 +76,7 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="add-lembaga" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form action="#" id="form-lembaga" method="post">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah Lembaga</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="">Nama Lembaga</label>
-                        <input type="text" name="nama_lembaga" id="nama" class="form-control" placeholder=""
-                            aria-describedby="helpId">
-                        <small id="helpId" class="text-error enama_lembaga"></small>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Pengelola</label>
-                        <select name="id_pengelola" class="form-control" id="id_pengelola">
-                            <?php foreach ($data_user as $key => $value): ?>
-                            <option value="<?=$value->id?>"><?=$value->nama_user?></option>
-                            <?php endforeach;?>
-                        </select>
-                        <small id="helpId" class="text-error eemail"></small>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" onclick="add_lembaga();" class="btn btn-primary">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 <?=$this->endSection();?>
 <?=$this->section('js');?>
 <script>

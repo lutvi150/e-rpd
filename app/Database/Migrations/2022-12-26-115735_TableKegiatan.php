@@ -10,32 +10,35 @@ class TableKegiatan extends Migration
     {
         $this->forge->addField([
             'id_kegiatan' => [
-                'type'           => 'INT',
-                'constraint'     => 5,
-                'unsigned'       => true,
+                'type' => 'INT',
+                'constraint' => 5,
+                'unsigned' => true,
                 'auto_increment' => true,
             ],
+            'id_lembaga' => [
+                'type' => 'BIGINT',
+            ],
             'kode_kegiatan' => [
-                'type'       => 'VARCHAR',
+                'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
             'uraian_kegiatan' => [
                 'type' => 'TEXT',
             ],
-            'pagu_kegiatan' =>[
-                'type' =>'BIGINT',
+            'pagu_kegiatan' => [
+                'type' => 'BIGINT',
             ],
-            'mulai_pelaksanaan' =>[
+            'mulai_pelaksanaan' => [
                 'type' => 'VARCHAR',
-                'constraint'=>'50'
+                'constraint' => '50',
             ],
-            'akhir_pelaksanaan' =>[
+            'akhir_pelaksanaan' => [
                 'type' => 'VARCHAR',
-                'constraint'=>'50'
+                'constraint' => '50',
             ],
-            'tahun_anggaran'=>[
+            'tahun_anggaran' => [
                 'type' => 'VARCHAR',
-                'constraint'=>'5'
+                'constraint' => '5',
             ],
         ]);
         $this->forge->addKey('id_kegiatan', true);

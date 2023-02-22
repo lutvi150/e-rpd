@@ -2,7 +2,7 @@
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
     <div class="menu_section">
         <h3>Menu</h3>
-        <?php if ($session->get('role') == 'admin'): ?>
+        <?php if ($session->get('role') == 'administrator'): ?>
         <ul class="nav side-menu">
             <li><a href="/administrator"><i class="fa fa-home"></i> Home</a></li>
             <li><a href="/administrator/data-user"><i class="fa fa-users"></i> Data User</a></li>

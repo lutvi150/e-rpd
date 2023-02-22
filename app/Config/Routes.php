@@ -51,6 +51,13 @@ $routes->group('administrator', function ($routes) {
 $routes->group('unit', function ($routes) {
     $routes->get('/', 'Unit::index');
     $routes->get('rpd', 'Unit::rpd');
+    // kegiatan
+    $routes->get('tambah-kegiatan/(:num)', 'Unit::tambah_kegiatan/$1');
+    $routes->post('api/store-kegiatan/(:any)', 'Unit::store_kegiatan/$1');
+    $routes->post('api/delete-kegiatan', 'Unit::delete_kegiatan');
+    $routes->post('api/edit-kegiatan', 'Unit::edit_kegiatan');
+    // penarikan bulanan
+    $routes->get('tambah-penarikan-bulanan/(:num)/(:num)', 'Unit::tambah_penarikan_bulanan/$1/$2');
 });
 // use for api
 $routes->post('/api/login', 'Home::authorize');
