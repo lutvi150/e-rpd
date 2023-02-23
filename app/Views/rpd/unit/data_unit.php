@@ -35,8 +35,6 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card-box table-responsive">
-                                    <button type="button" onclick="show_modal();" class="btn btn-info btn-xs"><i
-                                            class="fa fa-plus"></i> Tambah Unit Kampus</button>
                                     <table id="datatable-responsive"
                                         class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
                                         width="100%">
@@ -44,7 +42,7 @@
                                             <tr>
                                                 <th style="width:1%">No.</th>
                                                 <th>Nama Lembaga</th>
-                                                <th>Total Pagi</th>
+                                                <th>Total Pagu</th>
                                                 <th style="width:10%">Aksi</th>
                                             </tr>
                                         </thead>

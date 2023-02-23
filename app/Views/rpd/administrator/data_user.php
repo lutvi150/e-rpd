@@ -54,7 +54,8 @@
                                                 <td><?=$value->nama_user?></td>
                                                 <td><?=$value->email?></td>
                                                 <td>
-                                                    <button class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                                    <button type="button" onclick="delete_data(<?=$value->id?>)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                                    <button onclick="edit_data(<?=$value->id?>)" class="btn btn-warning btn-xs" type="button"><i class="fa fa-edit"></i></button>
                                                 </td>
                                             </tr>
                                             <?php endforeach;?>
@@ -76,7 +77,7 @@
 <div class="modal fade" id="add-user" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="administrator/save-data-user" id="form-user" method="post">
+            <form  id="form-user" method="post">
             <div class="modal-header">
                 <h5 class="modal-title">Tambah User</h5>
             </div>
@@ -92,9 +93,15 @@
                 </div>
                 <div class="form-group">
                   <label for="">Email</label>
-                  <input type="email" name="email" id="email" class="form-control" placeholder="" aria-describedby="helpId">
+                  <input type="email" name="email" id="email"  class="form-control" placeholder="" aria-describedby="helpId">
                   <small id="helpId" class="text-error eemail"></small>
                 </div>
+                <div class="form-group show-password" hidden >
+                    <label for="">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" placeholder="" aria-describedby="helpId">
+                    <small id="helpId" class="" style="color: red;">Jika ingin ubah password masukkan password disini, jika tidak cukup kosongkan</small>
+                  </div>
+                  
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -110,16 +117,75 @@
     let base_url="<?=base_url();?>";
     show_modal=()=>{
         $("#add-user").modal("show");
+        $(".show-password").attr('hidden',true);
+        $("input[name='email']").removeAttr('disabled');
         $('input').val("");
-        $("#form-user").attr("action",'/administrator/api/save-data-user')
+        $("#form-user").attr("action",'/administrator/api/save-data-user/store')
+    }
+    edit_data = (id) => {
+        
+        $(".show-password").removeAttr('hidden');
+        $("input[name='email']").attr('disabled',true);
+        sessionStorage.setItem('id_user', id);
+        $.ajax({
+            type: "POST",
+            url: base_url + "/administrator/api/edit-data-user",
+            data: {
+                id_user: id
+            },
+            dataType: "JSON",
+            success: function (response) {
+                $("input[name='nama']").val(response.nama_user);
+                $("input[name='email']").val(response.email);
+                $("#form-user").attr("action", "/administrator/api/save-data-user/update");
+                $("#add-user").modal("show");
+            },
+            error: function () {
+                $(".btn-loading").hide();
+                $(".btn-login").removeAttr('hidden style');
+                Swal.fire('Something went wrong');
+            }
+        });
+    }
+    delete_data = (id) => {
+        Swal.fire({
+            title: 'Kamu akan hapus data ini ?',
+            showDenyButton: true,
+            confirmButtonText: 'Iya',
+            denyButtonText: `Batalkan`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url('/administrator/api/delete-data-user')?>",
+                    data: {
+                        id: id
+                    },
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response.status == 'success') {
+                            Swal.fire('Data berhasil di hapus!', '', 'success').then(() => {
+                                location.reload();
+                            })
+                        }else{
+                            Swal.fire(`${response.msg}`, '', 'error');
+                        }
+                    }
+                });
+
+            } else if (result.isDenied) {
+                Swal.fire('Hapus Data di batalkan', '', 'info')
+            }
+        })
     }
      add_user=()=> {
         $(".text-error").text('');
-        // $(".btn-login").hide();
-        // $(".btn-loading").removeAttr('hidden style');
+        console.log($("#form-user").attr("action"));
         let data = {
             email: $("#email").val(),
             nama: $("#nama").val(),
+            id:sessionStorage.getItem('id_user'),
         }
         $("#form-user").ajaxForm({
             type: "POST",
@@ -131,8 +197,6 @@
                     $.each(response.errors, function(indexInArray, valueOfElement) {
                         $(".e" + indexInArray).text(valueOfElement);
                     });
-                    $(".btn-loading").hide();
-                    $(".btn-login").removeAttr('hidden style');
                 } else if (response.status == 'user not found') {
                     Swal.fire('Maaf username atau password yang anda gunakan salah');
                 } else if (response.status == 'success') {
@@ -144,8 +208,6 @@
                 }
             },
             error: function() {
-                $(".btn-loading").hide();
-                $(".btn-login").removeAttr('hidden style');
                 Swal.fire('Something went wrong');
             }
         }).submit();

@@ -42,7 +42,9 @@ $routes->get('/logout', 'Home::logout');
 $routes->group('administrator', function ($routes) {
     $routes->get('/', 'Administrator::index');
     $routes->get('data-user', 'Administrator::data_user');
-    $routes->post('api/save-data-user', 'Administrator::store_data_user');
+    $routes->post('api/save-data-user/(:any)', 'Administrator::store_data_user/$1');
+    $routes->post('api/edit-data-user', 'Administrator::edit_data_user');
+    $routes->post('api/delete-data-user', 'Administrator::delete_data_user');
     $routes->get('data-unit', 'Administrator::data_unit');
     $routes->post('api/save-data-lembaga', 'Administrator::store_data_lembaga');
     $routes->post('api/delete-data-lembaga', 'Administrator::delete_data_lembaga');
@@ -58,6 +60,11 @@ $routes->group('unit', function ($routes) {
     $routes->post('api/edit-kegiatan', 'Unit::edit_kegiatan');
     // penarikan bulanan
     $routes->get('tambah-penarikan-bulanan/(:num)/(:num)', 'Unit::tambah_penarikan_bulanan/$1/$2');
+    $routes->post('api/store-penarikan-bulanan/(:any)', 'Unit::store_rincian_kegiatan/$1');
+    $routes->post('api/edit-penarikan-bulanan', 'Unit::edit_rincian_kegiatan');
+    $routes->post('api/delete-penarikan-bulanan', 'Unit::delete_rincian_kegiatan');
+    // use for update pagu monthly
+    $routes->post('api/update-pagu-perbulan', 'Unit::update_pagu_rincian_kegiatan_perbulan');
 });
 // use for api
 $routes->post('/api/login', 'Home::authorize');

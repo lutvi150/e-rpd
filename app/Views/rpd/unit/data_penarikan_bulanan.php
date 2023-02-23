@@ -4,7 +4,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Data Kegiatan Unit </h3>
+                <h3>Rencana Penarikan Dana Bulanan </h3>
             </div>
         </div>
 
@@ -35,50 +35,57 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card-box table-responsive">
-                                    <a href="/unit/rpd" class="btn btn-info btn-xs"><i class="fa fa-reply"></i>Kembali</a>
+                                    <a href="/unit/tambah-kegiatan/<?=$kegiatan->id_kegiatan?>"
+                                        class="btn btn-info btn-xs"><i class="fa fa-reply"></i>Kembali</a>
                                     <table class="table table-bordered">
                                         <tr>
-                                            <td colspan="2">Kementrian Negara/ Lembaga</td>
-                                            <td colspan="3">: Kementrian Agama</td>
+                                            <td colspan="3">Kementrian Negara/ Lembaga</td>
+                                            <td colspan="14">: Kementrian Agama</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">Satuan Kerja</td>
-                                            <td colspan="3">: IAIN Batusangkar</td>
+                                            <td colspan="3">Satuan Kerja</td>
+                                            <td colspan="14">: IAIN Batusangkar</td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">Satuan Kerja</td>
-                                            <td colspan="3">: IAIN Batusangkar</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">Fak/PPs/Lembaga/Unit</td>
-                                            <td colspan="3">: <?=$lembaga->nama_lembaga?></td>
+                                            <td colspan="3">Fak/PPs/Lembaga/Unit</td>
+                                            <td colspan="14">: <?=$lembaga->nama_lembaga?></td>
                                         </tr>
                                         <tr style="background-color: rgb(130, 230, 137);text-align: center;">
                                             <td>Kode</td>
                                             <td>Uraian</td>
                                             <td>Pagu (Rp)</td>
-                                            <td>Jadwal Pelaksanaan</td>
-                                            <td style="width: 10px;"><button onclick="show_activity()" type="button"
+                                            <?php foreach ($month as $key => $value): ?>
+                                            <td><?=$value['month']?></td>
+                                            <?php endforeach;?>
+                                            <td>Jumlah</td>
+                                            <td style="width: 10px;"><button onclick="show_modal()" type="button"
                                                     class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Tambah
-                                                    Kegiatan</button></td>
+                                                    Rincian</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td><?=$kegiatan->kode_kegiatan?></td>
+                                            <td><b><?=$kegiatan->uraian_kegiatan?></b></td>
+                                            <td>Rp.<?=number_format($kegiatan->pagu_kegiatan)?></td>
+                                            <?php for ($i = 0; $i < 12; $i++): ?>
+                                            <td></td>
+                                            <?php endfor;?>
+                                            <td colspan="2"></td>
                                         </tr>
                                         <!-- use for data  -->
-                                        <?php foreach ($activity as $key => $value): ?>
-                                        <tr>
-                                            <td><?=$value->kode_kegiatan?></td>
-                                            <td><?=$value->uraian_kegiatan?></td>
-                                            <td>Rp.<?=number_format($value->pagu_kegiatan)?></td>
-                                            <td><?=$month[$value->mulai_pelaksanaan - 1]['month'] . " - " . $month[$value->akhir_pelaksanaan - 1]['month']?>
+                                        <?php foreach ($rincian_kegiatan as $key => $value): ?>
+                                            <td style="text-align: right;"><?=$value->kode_rincian?></td>
+                                            <td><?=$value->uraian_rincian_kegiatan?></td>
+                                            <td>Rp.<?=number_format($value->pagu_rincian_kegiatan)?></td>
+                                            <?php for ($i = 1; $i <= 13; $i++): ?>
+                                            <td>
+                                                <input type="number" data-month="<?=$i?>"  class="form-control">
                                             </td>
-                                            <td style="text-align: center;">
-                                                <button onclick="delete_data(<?=$value->id_kegiatan?>)" type="button"
-                                                    class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
-                                                <button type="button" onclick="edit_data(<?=$value->id_kegiatan?>)"
-                                                    class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button>
-                                                    <a href="/unit/tambah-penarikan-bulanan/<?=$lembaga->id_lembaga . "/" . $value->id_kegiatan?>" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Penarikan Bulanan</a>
+                                            <?php endfor;?>
+                                            <td>
+                                                <button type="button" onclick="delete_data(<?=$value->id_rincian?>)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                                <button type="button" onclick="edit_data(<?=$value->id_rincian?>)" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button>
                                             </td>
-                                        </tr>
-                                        <?php endforeach;?>
+                                            <?php endforeach;?>
                                         <!-- end data  -->
                                     </table>
                                 </div>
@@ -90,95 +97,62 @@
         </div>
     </div>
 </div>
-<!-- Modal add activity -->
-<div class="modal fade" id="add-activity" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<!-- Modal add draw money -->
+<div class="modal fade" id="add-new-draw" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="" id="form-activity" method="post">
+            <form  id="form-rincian-kegiatan" method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Kegiatan</h5>
-
+                    <h5 class="modal-title">Tambah Rincian Penarikan Bulanan</h5>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="">Kode Kegiatan</label>
-                        <input type="text" name="kode_kegiatan" id="" class="form-control" placeholder=""
+                        <label for="">Kode Rincian</label>
+                        <input type="text" name="kode_rincian" id="" class="form-control" placeholder=""
                             aria-describedby="helpId">
-                        <small id="helpId" class="text-error ekode_kegiatan"></small>
+                        <small id="helpId" class="text-error ekode_rincian"></small>
                     </div>
                     <div class="form-group">
-                        <label for="">Uraian</label>
-                        <input type="text" name="uraian_kegiatan" id="" class="form-control" placeholder=""
-                            aria-describedby="helpId">
-                        <small id="helpId" class="text-error euraian_kegiatan"></small>
+                        <label for="">Uraian Kegiatan</label>
+                        <textarea name="uraian_rincian_kegiatan" class="form-control" id="" cols="30" rows="4"></textarea>
+                        <small id="helpId" class="text-error euraian_rincian_kegiatan"></small>
                     </div>
                     <div class="form-group">
                         <label for="">Pagu</label>
-                        <input type="text" name="pagu_kegiatan" id="" class="form-control" placeholder=""
-                            aria-describedby="helpId">
-                        <small id="helpId" class="text-error epagu_kegiatan"></small>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Mulai Pelaksanaan</label>
-                        <select name="mulai_pelaksanaan" onchange="check_start_month()" class="form-control"
-                            id="mulai_pelaksanaan">
-                            <?php foreach ($month as $key => $value): ?>
-                            <option value="<?=$value['kode']?>"><?=$value['long_month']?></option>
-                            <?php endforeach;?>
-                        </select>
-                        <small id="helpId" class="text-error emulai_pelaksanaan"></small>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Akhir Pelaksanaan</label>
-                        <select name="akhir_pelaksanaan" onchange="check_start_month()" class="form-control"
-                            id="akhir_pelaksanaan">
-                            <?php foreach ($month as $key => $value): ?>
-                            <option value="<?=$value['kode']?>"><?=$value['long_month']?></option>
-                            <?php endforeach;?>
-                        </select>
-                        <small id="helpId" class="text-error eakhir_pelaksanaan"></small>
+                        <input type="text" name="pagu_rincian_kegiatan" class="form-control">
+                        <small id="helpId" class="text-error epagu_rincian_kegiatan"></small>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                    <button type="button" onclick="add_activity()" class="btn btn-primary">Simpan</button>
+                    <button type="button" onclick="store_data()" class="btn btn-primary">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 <?=$this->endSection();?>
 <?=$this->section('js');?>
 <script>
+    $(document).ready(function () {
+        document.body.style.zoom = "80%";
+    });
     let base_url = "<?=base_url();?>";
     let id_lembaga = "<?=$lembaga->id_lembaga;?>";
-    show_activity = () => {
-        $("#add-activity").modal("show");
+    let id_kegiatan="<?=$kegiatan->id_kegiatan?>"
+    show_modal = () => {
+        $("#add-new-draw").modal("show");
         $('input').val("");
-        $("#form-activity").attr("action", "/unit/api/store-kegiatan/store");
+        $("#form-rincian-kegiatan").attr("action", "/unit/api/store-penarikan-bulanan/store");
     }
-    check_start_month = () => {
-        $(".text-error").text("");
-        let start = $("#mulai_pelaksanaan").children("option:selected").val();
-        let end = $("#akhir_pelaksanaan").children("option:selected").val();
-        console.log({
-            start: parseInt(start),
-            end: parseInt(end)
-        });
-        if (parseInt(start) > parseInt(end)) {
-            $(".emulai_pelaksanaan").text("Mulai pelaksanaan tidak boleh lewat dari akhir pelaksanaan");
-            $(".eakhir_pelaksanaan").text('Akhir Pelaksanaan Tidak Boleh Mendahului Mulai Pelaksanaan');
-        }
-    }
-    add_activity = () => {
+    store_data = () => {
         $(".text-error").text('');
-        $("#form-activity").ajaxForm({
+        $("#form-rincian-kegiatan").ajaxForm({
             type: "POST",
-            url: base_url + $("#form-activity").attr("action"),
+            url: base_url + $("#form-rincian-kegiatan").attr("action"),
             data: {
-                id_lembaga: id_lembaga,
-                id_kegiatan: sessionStorage.getItem('id_kegiatan')
+                id_kegiatan: id_kegiatan,
+                id_rincian: sessionStorage.getItem('id_rincian')
             },
             dataType: "JSON",
             success: function (response) {
@@ -186,8 +160,6 @@
                     $.each(response.errors, function (indexInArray, valueOfElement) {
                         $(".e" + indexInArray).text(valueOfElement);
                     });
-                    $(".btn-loading").hide();
-                    $(".btn-login").removeAttr('hidden style');
                 } else if (response.status == 'success') {
                     Swal.fire(`${response.msg}`).then(() => {
                         location.reload();
@@ -197,31 +169,27 @@
                 }
             },
             error: function () {
-                $(".btn-loading").hide();
-                $(".btn-login").removeAttr('hidden style');
                 Swal.fire('Something went wrong');
             }
         }).submit();
     }
     edit_data = (id) => {
-        sessionStorage.setItem('id_kegiatan', id);
+        sessionStorage.setItem('id_rincian', id);
         $.ajax({
             type: "POST",
-            url: base_url + "/unit/api/edit-kegiatan",
+            url: base_url + "/unit/api/edit-penarikan-bulanan",
             data: {
-                id_kegiatan: id
+                id_rincian: id
             },
             dataType: "JSON",
             success: function (response) {
-                $("input[name='kode_kegiatan']").val(response.data.kode_kegiatan);
-                $("input[name='uraian_kegiatan']").val(response.data.uraian_kegiatan);
-                $("input[name='pagu_kegiatan']").val(response.data.pagu_kegiatan);
-                $("#form-activity").attr("action", "/unit/api/store-kegiatan/update");
-                $("#add-activity").modal("show");
+                $("input[name='kode_rincian']").val(response.data.kode_rincian);
+                $("textarea[name='uraian_rincian_kegiatan']").val(response.data.uraian_rincian_kegiatan);
+                $("input[name='pagu_rincian_kegiatan']").val(response.data.pagu_rincian_kegiatan);
+                $("#form-rincian-kegiatan").attr("action", "/unit/api/store-penarikan-bulanan/update");
+                $("#add-new-draw").modal("show");
             },
             error: function () {
-                $(".btn-loading").hide();
-                $(".btn-login").removeAttr('hidden style');
                 Swal.fire('Something went wrong');
             }
         });
@@ -237,7 +205,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url('/unit/api/delete-kegiatan')?>",
+                    url: "<?=base_url('/unit/api/dalete-penarikan-bulanan')?>",
                     data: {
                         id: id
                     },

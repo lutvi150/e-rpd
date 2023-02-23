@@ -12,7 +12,13 @@ class Administrator extends BaseController
     use ResponseTrait;
     public function index()
     {
-        return view('rpd/administrator/dashboard');
+        $unit = new ModelUnit();
+        $kegiatan = new \App\Models\ModelKegiatan;
+        $user = new ModelUser();
+        $data['total_unit'] = $unit->countAllResults();
+        $data['user'] = $user->where('role', 'unit')->countAllResults();
+        $data['kegiatan'] = $kegiatan->countAllResults();
+        return view('rpd/administrator/dashboard', $data);
     }
     public function data_user(Type $var = null)
     {
@@ -20,15 +26,15 @@ class Administrator extends BaseController
         $data['data_user'] = $user->orderBy('id', 'desc')->where('role', 'unit')->findAll();
         return view('rpd/administrator/data_user', $data);
     }
-    public function store_data_user(Type $var = null)
+    public function store_data_user($status)
     {
         $validation = \Config\Services::validation();
-        $validation->setRules(
-            [
+        if ($status == 'store') {
+            $rules = [
                 'email' => 'required|valid_email|is_unique[table_user.email]',
                 'nama' => 'required',
-            ],
-            [
+            ];
+            $messages = [
                 'email' => [
                     'required' => 'Email tidak boleh kosong',
                     'valid_email' => 'Email yang digunkaan harus email valid',
@@ -37,8 +43,18 @@ class Administrator extends BaseController
                 'nama' => [
                     'required' => 'Nama tidak boleh kosong',
                 ],
-            ]
-        );
+            ];
+        } else {
+            $rules = [
+                'nama' => 'required',
+            ];
+            $messages = [
+                'nama' => [
+                    'required' => 'Nama tidak boleh kosong',
+                ]];
+        }
+
+        $validation->setRules($rules, $messages);
         if (!$validation->withRequest($this->request)->run()) {
             $response = [
                 'status' => 'validation_failed',
@@ -49,20 +65,61 @@ class Administrator extends BaseController
             $user = new ModelUser();
             $email = $this->request->getPost('email');
             $nama = $this->request->getPost('nama');
+            $password = $this->request->getPost('password');
             $insert = [
                 'email' => $email,
                 'nama_user' => $nama,
-                'password' => hash('sha256', $email),
                 'role' => 'unit',
-                'created_at' => now(),
-
+                'created_at' => date('Y-m-d H:i:s'),
             ];
-
-            $make_data = $user->insert($insert);
+            if ($status == 'store') {
+                $insert['password'] = hash('sha256', $email);
+            } else {
+                if ($password) {
+                    $insert['password'] = hash('sha256', $password);
+                }
+            }
+            if ($status == 'store') {
+                $make_data = $user->insert($insert);
+                $msg = "Data user berhasil di tambahkan";
+            } else {
+                $id = $this->request->getPost('id');
+                $make_data = $user->update($id, $insert);
+                $msg = 'Data user berhasil di perbarui';
+            }
             $response = [
                 'status' => 'success',
-                'msg' => 'Data user berhasil di tambahkan',
+                'msg' => $msg,
                 'insert' => $insert,
+            ];
+        }
+        return $this->respond($response, 200);
+    }
+    // edit data user
+    public function edit_data_user(Type $var = null)
+    {
+        $user = new ModelUser();
+        $id_user = $this->request->getPost('id_user');
+        $data = $user->find($id_user);
+        return $this->respond($data, 200);
+    }
+    // delet data user
+    public function delete_data_user(Type $var = null)
+    {
+        $unit = new \App\Models\ModelUnit;
+        $id_user = $this->request->getPost('id');
+        $check = $unit->asObject()->where('id_pengelola', $id_user)->first();
+        if ($check) {
+            $response = [
+                'status' => 'failed',
+                'msg' => 'Akun ini sedang aktif di unit ' . $check->nama_lembaga . ', silahkan ganti pengelola unit tersebut',
+            ];
+        } else {
+            $user = new ModelUser();
+            $user->delete($id_user);
+            $response = [
+                'status' => 'success',
+                'msg' => 'Data user berhasil di hapus',
             ];
         }
         return $this->respond($response, 200);

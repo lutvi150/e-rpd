@@ -5,16 +5,16 @@
     <div class="row tile_count">
         <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-home"></i> Total Unit</span>
-            <div class="count">0</div>
+            <div class="count"><?=$total_unit?></div>
         </div>
         <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-book"></i> Total Kegiatan</span>
-            <div class="count">0</div>
+            <div class="count"><?=$kegiatan?></div>
 
         </div>
         <div class="col-md-4 col-sm-4 col-xs-6 tile_stats_count">
             <span class="count_top"><i class="fa fa-users"></i> Total user</span>
-            <div class="count green">0</div>
+            <div class="count green"><?=$user;?></div>
         </div>
     </div>
     <!-- /top tiles -->
@@ -68,17 +68,9 @@
 					"November", "Desember"
 				],
 				datasets: [{
-					label: 'Jurusan A',
+					label: 'Data Pengajuan Dana',
 					backgroundColor: "#26B99A",
-					data: [51, 30, 40, 28, 92, 50, 40, 50, 60, 10, 20, 10]
-				}, {
-					label: 'Jurusan B',
-					backgroundColor: "#03586A",
-					data: [41, 56, 25, 48, 72, 34, 12, 200, 300, 100, 10, 1]
-				}, {
-					label: 'Jurusan C',
-					backgroundColor: "#1019f0",
-					data: [41, 42, , 10, 10, 10, 10, 10, 10, 10, 10, 10]
+					data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 				}]
 			},
 
