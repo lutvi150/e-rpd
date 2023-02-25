@@ -16,7 +16,7 @@ CREATE TABLE `migrations` (
   `time` int(11) NOT NULL,
   `batch` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `table_kegiatan` (
   `id_kegiatan` int(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -44,7 +44,7 @@ CREATE TABLE `table_rincian_kegiatan` (
   `uraian_rincian_kegiatan` text NOT NULL,
   `pagu_rincian_kegiatan` int(11) NOT NULL,
   PRIMARY KEY (`id_rincian`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `table_rincian_kegiatan_perbulan` (
   `id_rincian_kegiatan_perbulan` int(5) unsigned NOT NULL AUTO_INCREMENT,
@@ -52,6 +52,14 @@ CREATE TABLE `table_rincian_kegiatan_perbulan` (
   `bulan` bigint(20) NOT NULL,
   `total_pagu_perbulan` bigint(20) NOT NULL,
   PRIMARY KEY (`id_rincian_kegiatan_perbulan`)
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `table_rincian_kegiatan_perminggu` (
+  `id_rincian_kegiatan_perminggu` int(5) unsigned NOT NULL AUTO_INCREMENT,
+  `id_rincian_kegiatan_perbulan` int(11) NOT NULL,
+  `minggu` int(5) NOT NULL,
+  `total_pagu_perminggu` bigint(20) NOT NULL,
+  PRIMARY KEY (`id_rincian_kegiatan_perminggu`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `table_user` (
@@ -79,7 +87,8 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 (6, '2022-12-26-115804', 'App\\Database\\Migrations\\TableRincianPerbulan', 'default', 'App', 1672063554, 1),
 (7, '2022-12-26-115825', 'App\\Database\\Migrations\\TableKalenderHarian', 'default', 'App', 1672063554, 1),
 (8, '2022-12-26-115834', 'App\\Database\\Migrations\\TablePenarikanHarian', 'default', 'App', 1672063554, 1),
-(9, '2023-02-23-074759', 'App\\Database\\Migrations\\TableRincianKegiatanPerbulan', 'default', 'App', 1677138595, 2);
+(9, '2023-02-23-074759', 'App\\Database\\Migrations\\TableRincianKegiatanPerbulan', 'default', 'App', 1677138595, 2),
+(10, '2023-02-24-193523', 'App\\Database\\Migrations\\TableRincianPerminggu', 'default', 'App', 1677267442, 3);
 
 INSERT INTO `table_kegiatan` (`id_kegiatan`, `id_lembaga`, `kode_kegiatan`, `uraian_kegiatan`, `pagu_kegiatan`, `mulai_pelaksanaan`, `akhir_pelaksanaan`, `tahun_anggaran`) VALUES
 (1, 5, '2131.BGC.002.005.5A', 'Pelaksanaan Audit Internal', 86129000, '2', '12', '2023');
@@ -98,7 +107,48 @@ INSERT INTO `table_lembaga` (`id_lembaga`, `nama_lembaga`, `id_pengelola`) VALUE
 
 INSERT INTO `table_rincian_kegiatan` (`id_rincian`, `id_kegiatan`, `kode_rincian`, `uraian_rincian_kegiatan`, `pagu_rincian_kegiatan`) VALUES
 (1, 1, '521211', 'Belanja Bahan', 8561000);
+INSERT INTO `table_rincian_kegiatan` (`id_rincian`, `id_kegiatan`, `kode_rincian`, `uraian_rincian_kegiatan`, `pagu_rincian_kegiatan`) VALUES
+(2, 1, '524114', 'Perjalanan Paket Meeting Dalam Kota', 2400000);
+INSERT INTO `table_rincian_kegiatan` (`id_rincian`, `id_kegiatan`, `kode_rincian`, `uraian_rincian_kegiatan`, `pagu_rincian_kegiatan`) VALUES
+(4, 1, '524119', 'Perjalanan Paket Meeting Luar Kota', 75168000);
 
+INSERT INTO `table_rincian_kegiatan_perbulan` (`id_rincian_kegiatan_perbulan`, `id_rincian_kegiatan`, `bulan`, `total_pagu_perbulan`) VALUES
+(1, 0, 1, 20);
+INSERT INTO `table_rincian_kegiatan_perbulan` (`id_rincian_kegiatan_perbulan`, `id_rincian_kegiatan`, `bulan`, `total_pagu_perbulan`) VALUES
+(2, 0, 1, 20);
+INSERT INTO `table_rincian_kegiatan_perbulan` (`id_rincian_kegiatan_perbulan`, `id_rincian_kegiatan`, `bulan`, `total_pagu_perbulan`) VALUES
+(3, 1, 1, 0);
+INSERT INTO `table_rincian_kegiatan_perbulan` (`id_rincian_kegiatan_perbulan`, `id_rincian_kegiatan`, `bulan`, `total_pagu_perbulan`) VALUES
+(4, 2, 1, 0),
+(5, 4, 1, 0),
+(6, 1, 2, 4000000),
+(7, 1, 12, 0),
+(8, 2, 2, 300000),
+(9, 1, 3, 0),
+(10, 1, 4, 0),
+(11, 1, 5, 0),
+(12, 1, 6, 4561000),
+(13, 1, 7, 0),
+(14, 1, 8, 0),
+(15, 1, 9, 0),
+(16, 1, 10, 0),
+(17, 1, 11, 0),
+(18, 2, 11, 0),
+(19, 1, 13, 0),
+(20, 4, 2, 1200000),
+(21, 2, 3, 200000),
+(22, 2, 6, 400000),
+(23, 2, 7, 300000),
+(24, 2, 8, 600000),
+(25, 2, 9, 300000),
+(26, 2, 10, 300000),
+(27, 4, 3, 2800000),
+(28, 4, 6, 8500000),
+(29, 4, 7, 14500000),
+(30, 4, 8, 22500000),
+(31, 4, 9, 8000000),
+(32, 4, 10, 6000000),
+(33, 4, 11, 1668000);
 
 
 

@@ -133,8 +133,23 @@ class Unit extends BaseController
         $kegiatan = new ModelKegiatan();
         $unit = new ModelUnit();
         $rincian_kegiatan = new \App\Models\ModelRincianKegiatan;
+        $rincian_kegiatan_perbulan = new \App\Models\ModelRincianKegiatanPerbulan;
         $data['kegiatan'] = $kegiatan->asObject()->find($id_kegiatan);
-        $data['rincian_kegiatan'] = $rincian_kegiatan->asObject()->where('id_kegiatan', $id_kegiatan)->findAll();
+        $data_rincian_kegiatan = $rincian_kegiatan->asObject()->where('id_kegiatan', $id_kegiatan)->findAll();
+        $result_rincian_kegiatan = [];
+        if ($data_rincian_kegiatan) {
+            foreach ($data_rincian_kegiatan as $key => $value) {
+                $result_rincian_kegiatan[] = (object) [
+                    'id_rincian' => $value->id_rincian,
+                    'id_kegiatan' => $value->id_kegiatan,
+                    'kode_rincian' => $value->kode_rincian,
+                    'uraian_rincian_kegiatan' => $value->uraian_rincian_kegiatan,
+                    'pagu_rincian_kegiatan' => $value->pagu_rincian_kegiatan,
+                    'rincian_pagu' => $rincian_kegiatan_perbulan->asObject()->select('total_pagu_perbulan as pagu,bulan')->where('id_rincian_kegiatan', $value->id_rincian)->orderBy('bulan')->findAll(),
+                ];
+            }
+        }
+        $data['rincian_kegiatan'] = $result_rincian_kegiatan;
         $data['lembaga'] = $unit->find($id_lembaga);
         $data['month'] = $this->month('get');
 
@@ -184,8 +199,13 @@ class Unit extends BaseController
 
             ];
             if ($status == 'store') {
-                $make_data = $rincian_kegiatan->insert($insert);
-                $msg = 'Data rincian kegiatan berhasil di tambahkan';
+                $make_data = $rincian_kegiatan->insert($insert, false);
+                if ($make_data) {
+                    $true_data = 1;
+                } else {
+                    $true_data = 2;
+                }
+                $msg = 'Data rincian kegiatan berhasil di tambahkan' . $true_data;
             } else {
                 $id_kegiatan = $this->request->getPost('id_rincian');
                 $make_data = $rincian_kegiatan->update($id_kegiatan, $insert);
@@ -225,13 +245,13 @@ class Unit extends BaseController
     // update pague rincian kegiatan perbulan
     public function update_pagu_rincian_kegiatan_perbulan(Type $var = null)
     {
-        $id_rincian = $this->request->getPost('id_rincian');
+        $id_rincian = $this->request->getPost('id_rincian_kegiatan');
         $bulan = $this->request->getPost('bulan');
         $total_paguper_bulan = $this->request->getPost('total_pagu_perbulan');
         $rincian_kegiatan_perbulan = new \App\Models\ModelRincianKegiatanPerbulan;
-        $check = $rincian_kegiatan_perbulan->asObject()->where('id_rincian', $id_rincian)->first();
+        $check = $rincian_kegiatan_perbulan->asObject()->where('id_rincian_kegiatan', $id_rincian)->where('bulan', $bulan)->first();
         $insert = [
-            'id_rincian' => $id_rincian,
+            'id_rincian_kegiatan' => $id_rincian,
             'bulan' => $bulan,
             'total_pagu_perbulan' => $total_paguper_bulan,
         ];
@@ -247,6 +267,48 @@ class Unit extends BaseController
             'msg' => $msg,
         ];
         return $this->respond($response, 200);
+    }
+    // add penarikan mingguan
+    public function tambah_penarikan_mingguan($id_lembaga, $id_kegiatan, $id_rincian)
+    {
+        $unit = new ModelUnit();
+        $kegiatan = new ModelKegiatan();
+        $rincian_kegiatan = new \App\Models\ModelRincianKegiatan;
+        $rincian_perbulan = new \App\Models\ModelRincianKegiatanPerbulan;
+        $data['kegiatan'] = $kegiatan->asObject()->find($id_kegiatan);
+        $data['lembaga'] = $unit->asObject()->find($id_lembaga);
+        $data['rincian_kegiatan'] = $rincian_kegiatan->asObject()->find($id_rincian);
+        $data_rincian_perbulan = $rincian_perbulan->asObject()->where('id_rincian_kegiatan', $id_rincian)->where('total_pagu_perbulan !=', 0)->orderBy('bulan', 'asc')->findAll();
+        $resul_rincian_perbulan = [];
+        if ($data_rincian_perbulan) {
+            foreach ($data_rincian_perbulan as $key => $value) {
+                $resul_rincian_perbulan[] = (object) [
+                    'id_rincian_kegiatan_perbulan' => $value->id_rincian_kegiatan_perbulan,
+                    'id_rincian_kegiatan' => $value->id_rincian_kegiatan,
+                    'bulan' => (int) $value->bulan,
+                    'total_pagu_perbulan' => (int) $value->total_pagu_perbulan,
+                    'week_data' => $this->week_draw($value->id_rincian_kegiatan_perbulan),
+                ];
+            }
+        }
+        $data['rincian_perbulan'] = $resul_rincian_perbulan;
+        $data['month'] = $this->month('convert');
+        // return $this->respond($data);exit;
+        return view('rpd/unit/data_penarikan_mingguan', $data);
+    }
+    private function week_draw($id_rincian_kegiatan_perbulan)
+    {
+        $rincian_perminggu = new \App\Models\ModelRincianKegiatanPerminggu;
+        for ($i = 1; $i <= 4; $i++) {
+
+            $check = $rincian_perminggu->asObject()->where('id_rincian_kegiatan_perbulan', $id_rincian_kegiatan_perbulan)->where('minggu', $i)->first();
+            $pagu = $check == null ? 0 : $check->total_pagu_perminggu;
+            $result_perminggu[] = (object) [
+                'minggu' => $i,
+                'pagu' => $pagu,
+            ];
+        }
+        return $result_perminggu;
     }
     // costume bulan
     public function month($status)
@@ -316,6 +378,14 @@ class Unit extends BaseController
         ];
         if ($status == 'get') {
             return $month;
+        } elseif ($status == 'convert') {
+            foreach ($month as $key => $value) {
+                $result_month[$value['kode']] = (object) [
+                    'month' => $value['month'],
+                    'long_month' => $value['long_month'],
+                ];
+            }
+            return $result_month;
         }
     }
 }

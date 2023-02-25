@@ -65,6 +65,8 @@ $routes->group('unit', function ($routes) {
     $routes->post('api/delete-penarikan-bulanan', 'Unit::delete_rincian_kegiatan');
     // use for update pagu monthly
     $routes->post('api/update-pagu-perbulan', 'Unit::update_pagu_rincian_kegiatan_perbulan');
+    // use for weekly data
+    $routes->get('tambah-penarikan-mingguan/(:num)/(:num)/(:num)', 'Unit::tambah_penarikan_mingguan/$1/$2/$3');
 });
 // use for api
 $routes->post('/api/login', 'Home::authorize');

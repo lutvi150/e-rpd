@@ -37,7 +37,7 @@
                                 <div class="card-box table-responsive">
                                     <a href="/unit/tambah-kegiatan/<?=$kegiatan->id_kegiatan?>"
                                         class="btn btn-info btn-xs"><i class="fa fa-reply"></i>Kembali</a>
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered" id="table-rincian-kegiatan">
                                         <tr>
                                             <td colspan="3">Kementrian Negara/ Lembaga</td>
                                             <td colspan="14">: Kementrian Agama</td>
@@ -73,19 +73,47 @@
                                         </tr>
                                         <!-- use for data  -->
                                         <?php foreach ($rincian_kegiatan as $key => $value): ?>
+                                        <tr>
                                             <td style="text-align: right;"><?=$value->kode_rincian?></td>
                                             <td><?=$value->uraian_rincian_kegiatan?></td>
-                                            <td>Rp.<?=number_format($value->pagu_rincian_kegiatan)?></td>
-                                            <?php for ($i = 1; $i <= 13; $i++): ?>
-                                            <td>
-                                                <input type="number" data-month="<?=$i?>"  class="form-control">
+                                            <td class="pagu_<?=$value->id_rincian?>"
+                                                data-pagu="<?=$value->pagu_rincian_kegiatan?>">
+                                                Rp.<?=number_format($value->pagu_rincian_kegiatan)?></td>
+                                            <?php
+$array_total = [];
+$bulan = null;
+$total = 0;for ($i = 1; $i <= 13; $i++): ?>
+                                            <?php $pagu = 0;foreach ($value->rincian_pagu as $key => $value2) {
+    if ($i == (int) $value2->bulan) {
+        $pagu = $value2->pagu;
+        $bulan = $value2->bulan;
+        break;
+    }
+}?>
+                                            <?php
+$array_total[] = $pagu;
+if ($i == 13) {
+    $total = array_sum($array_total);
+}
+?>
+                                            <td style="text-align: center;" data-pagu="<?=$pagu?>" data-bulan="<?=$i?>"
+                                                data-id_kegiatan="<?=$kegiatan->id_kegiatan?>"
+                                                data-id_rincian="<?=$value->id_rincian?>"
+                                                class="<?=$i == 13 ? '' : 'pagu_perbulan'?> field_<?=$value->id_rincian?>_<?=$i?>">
+                                                <span
+                                                <?=$i == 13 ? ($value->pagu_rincian_kegiatan == $total ? 'style="color:green"' : 'style="color:red"') : '';?>
+                                                    class="span_<?=$value->id_rincian?>_<?=$i?>"><?=number_format($i == 13 ? $total : $pagu)?></span>
                                             </td>
                                             <?php endfor;?>
-                                            <td>
-                                                <button type="button" onclick="delete_data(<?=$value->id_rincian?>)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
-                                                <button type="button" onclick="edit_data(<?=$value->id_rincian?>)" class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button>
+                                            <td class="text-center">
+                                                <button type="button" onclick="delete_data(<?=$value->id_rincian?>)"
+                                                    class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                                <button type="button" onclick="edit_data(<?=$value->id_rincian?>)"
+                                                    class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button>
+                                                    <a <?=$value->pagu_rincian_kegiatan == $total ? '' : 'style="display: none;"'?>  href="/unit/tambah-penarikan-mingguan/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $value->id_rincian?>" class="btn btn-success btn-xs btn_<?=$value->id_rincian?>"><i class="fa fa-plus"></i> Penarikan Mingguan</a>
                                             </td>
-                                            <?php endforeach;?>
+                                        </tr>
+                                        <?php endforeach;?>
                                         <!-- end data  -->
                                     </table>
                                 </div>
@@ -101,7 +129,7 @@
 <div class="modal fade" id="add-new-draw" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form  id="form-rincian-kegiatan" method="post">
+            <form id="form-rincian-kegiatan" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Rincian Penarikan Bulanan</h5>
                 </div>
@@ -114,7 +142,8 @@
                     </div>
                     <div class="form-group">
                         <label for="">Uraian Kegiatan</label>
-                        <textarea name="uraian_rincian_kegiatan" class="form-control" id="" cols="30" rows="4"></textarea>
+                        <textarea name="uraian_rincian_kegiatan" class="form-control" id="" cols="30"
+                            rows="4"></textarea>
                         <small id="helpId" class="text-error euraian_rincian_kegiatan"></small>
                     </div>
                     <div class="form-group">
@@ -134,12 +163,78 @@
 <?=$this->endSection();?>
 <?=$this->section('js');?>
 <script>
-    $(document).ready(function () {
-        document.body.style.zoom = "80%";
-    });
     let base_url = "<?=base_url();?>";
     let id_lembaga = "<?=$lembaga->id_lembaga;?>";
-    let id_kegiatan="<?=$kegiatan->id_kegiatan?>"
+    let id_kegiatan = "<?=$kegiatan->id_kegiatan?>"
+    $(document).ready(function () {
+        document.body.style.zoom = "80%";
+        $('.pagu_perbulan').on('click', function () {
+            var $e = $(this).parent();
+            var id_kegiatan = $(this).data('id_kegiatan');
+            var id_rincian = $(this).data('id_rincian');
+            var bulan = $(this).data('bulan');
+            var pagu = parseInt($(this).data('pagu'));
+
+            let input =
+                `<input type="text"  onkeyup="update_total(${id_rincian},${bulan})"  class="form-control input_${id_rincian}_${bulan}" value="${pagu}" />`;
+            $(this).html(input);
+            var $newE = $e.find('input');
+            $newE.focus();
+            $newE.on('blur', function () {
+                pagu = parseInt($(this).val());
+                if (isNaN(pagu)) {
+                    pagu = 0;
+                }
+                $(this).parent().html('<span>' + pagu + '</span>');
+                $(".field_" + id_rincian + "_" + bulan).data('pagu', pagu);
+                sessionStorage.setItem('data', JSON.stringify({
+                    id_rincian_kegiatan: id_rincian,
+                    bulan: bulan,
+                    total_pagu_perbulan: $(this).val()
+                }))
+                update_rincian_perbulan();
+            });
+        });
+    });
+    update_total = (id_rincian, bulan) => {
+        let pagu_normal = parseInt($(".pagu_" + id_rincian).data('pagu'));
+        let data = 0;
+        let name = "";
+        let name_input = "";
+        let nilai;
+        for (let index = 1; index <= 12; index++) {
+            name = id_rincian + "_" + index;
+            name_input = id_rincian + "_" + bulan;
+            if (name == name_input) {
+                nilai = parseInt($(".input_" + id_rincian + "_" + index).val());
+            } else {
+                nilai = parseInt($(".field_" + id_rincian + "_" + index).data('pagu'));
+            }
+            if (isNaN(nilai)) {
+                nilai = 0;
+            }
+            data += nilai;
+        }
+        if (pagu_normal === data) {
+            $(".span_" + id_rincian + "_" + 13).text(data).attr('style','color:green');
+            $(".btn_"+id_rincian).removeAttr("style");
+        } else {
+            $(".span_" + id_rincian + "_" + 13).text(data).attr('style', 'color:red');
+            $(".btn_"+id_rincian).attr('style','display:none')
+        }
+    }
+    update_rincian_perbulan = () => {
+        $.ajax({
+            type: "POST",
+            url: base_url + "/unit/api/update-pagu-perbulan",
+            data: JSON.parse(sessionStorage.getItem('data')),
+            dataType: "JSON",
+            success: function (response) {},
+            error: function () {
+                Swal.fire('Something went wrong');
+            }
+        });
+    }
     show_modal = () => {
         $("#add-new-draw").modal("show");
         $('input').val("");
@@ -184,7 +279,8 @@
             dataType: "JSON",
             success: function (response) {
                 $("input[name='kode_rincian']").val(response.data.kode_rincian);
-                $("textarea[name='uraian_rincian_kegiatan']").val(response.data.uraian_rincian_kegiatan);
+                $("textarea[name='uraian_rincian_kegiatan']").val(response.data
+                    .uraian_rincian_kegiatan);
                 $("input[name='pagu_rincian_kegiatan']").val(response.data.pagu_rincian_kegiatan);
                 $("#form-rincian-kegiatan").attr("action", "/unit/api/store-penarikan-bulanan/update");
                 $("#add-new-draw").modal("show");
@@ -205,7 +301,7 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "POST",
-                    url: "<?=base_url('/unit/api/dalete-penarikan-bulanan')?>",
+                    url: "<?=base_url('/unit/api/delete-penarikan-bulanan')?>",
                     data: {
                         id: id
                     },
