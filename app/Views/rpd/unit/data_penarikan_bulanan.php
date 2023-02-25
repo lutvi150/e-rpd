@@ -35,7 +35,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card-box table-responsive">
-                                    <a href="/unit/tambah-kegiatan/<?=$kegiatan->id_kegiatan?>"
+                                    <a href="/unit/tambah-kegiatan/<?=$lembaga->id_lembaga?>"
                                         class="btn btn-info btn-xs"><i class="fa fa-reply"></i>Kembali</a>
                                     <table class="table table-bordered" id="table-rincian-kegiatan">
                                         <tr>

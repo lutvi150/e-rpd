@@ -62,19 +62,21 @@ at<?=$this->extend('layout/template');?>
                                             <td rowspan="2">Harga Satuan</td>
                                             <td rowspan="2">Bulan</td>
                                             <td rowspan="2">Pagu/Perbulan</td>
-                                            <td colspan="4">Rincian Perminggu</td>
+                                            <td colspan="5">Rincian Perminggu</td>
 
                                         </tr>
                                         <tr>
 
                                             <?php for ($i = 1; $i <= 4; $i++): ?>
-                                            <td style="text-align: center;">Minggu ke <br><?=$i?></td>
+                                            <td  style="text-align: center;">Minggu ke <br><?=$i?></td>
                                             <?php endfor;?>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td><?=$kegiatan->kode_kegiatan?></td>
                                             <td style="font-weight: bold;" ><?=$kegiatan->uraian_kegiatan?></td>
                                             <td>Rp. <?=number_format($kegiatan->pagu_kegiatan)?></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
@@ -100,6 +102,9 @@ at<?=$this->extend('layout/template');?>
                                             <?php foreach ($value->week_data as $key => $value2): ?>
                                             <td style="text-align: center;" class="week-draw" data-week="<?=$value2->minggu?>" data-pagu="<?=$value2->pagu?>" data-id_perbulan="<?=$value->id_rincian_kegiatan_perbulan?>" ><span><?=$value2->pagu?></span></td>
                                             <?php endforeach;?>
+                                            <td>
+                                                <a href="" class="btn btn-success btn-xs" ><i class="fa fa-plus"></i> Rincian Harian</a>
+                                            </td>
                                         </tr>
                                         <?php endforeach;?>
                                         <!-- end data  -->
