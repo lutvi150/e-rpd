@@ -36,14 +36,15 @@
                             <div class="col-sm-12">
                                 <div class="card-box table-responsive">
                                     <table id="datatable-responsive"
-                                        class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0"
+                                        class="table table-striped table-bordered dt-responsive " cellspacing="0"
                                         width="100%">
                                         <thead>
                                             <tr>
                                                 <th style="width:1%">No.</th>
                                                 <th>Nama Lembaga</th>
                                                 <th>Total Pagu</th>
-                                                <th style="width:10%">Aksi</th>
+                                                <th>Status Verifikasi</th>
+                                                <th style="width:10px">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -53,10 +54,20 @@
                                                 <td><?=$value->nama_lembaga?></td>
                                                 <td>Rp.0</td>
                                                 <td>
+                                                    <?php if ($value->status_verifikasi == 1): ?>
+                                                    <span class="label label-danger"><i class="fa fa-ban"></i> Draf</span>
+                                                    <?php elseif ($value->status_verifikasi == 2): ?>
+                                                    <span class="label label-warning"><i class="fa fa-refresh"></i> Proses Verifikasi</span>
+                                                    <?php elseif ($value->status_verifikasi == 3): ?>
+                                                    <span class="label label-success"><i class="fa fa-check"></i> Terverifikasi</span>
+                                                    <?php endif;?>
+                                                </td>
+                                                <td style="width: 10px;">
                                                     <a href="<?=base_url('unit/tambah-kegiatan/' . $value->id_lembaga)?>"
-
                                                         class="btn btn-success btn-xs"><i
                                                             class="fa fa-plus"></i> Tambah Kegiatan</a>
+                                                    <button type="button" class="btn btn-success btn-xs"><i class="fa fa-send"></i> Ajukan Verifikasi</button>
+                                                    <button type="button" class="btn btn-warning btn-xs"><i class="fa fa-book"></i> History Pengajuan</button>
                                                 </td>
                                             </tr>
                                             <?php endforeach;?>

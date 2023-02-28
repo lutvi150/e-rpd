@@ -160,7 +160,7 @@ class Administrator extends BaseController
             $insert = [
                 'nama_lembaga' => $nama_lembaga,
                 'id_pengelola' => $id_pengelola,
-
+                'status_verifikasi' => 1,
             ];
 
             $make_data = $unit->insert($insert, false);
@@ -181,6 +181,24 @@ class Administrator extends BaseController
             'status' => 'success',
         ];
         return $this->respond($response);
+    }
+    // use for rpd
+    public function rpd(Type $var = null)
+    {
+        $unit = new ModelUnit();
+        $data['unit'] = $unit->where('status_verifikasi !=', 1)->findAll();
+        // return $this->respond($data, 200);
+        // exit;
+        return view('rpd/unit/data_unit', $data);
+    }
+    // laporan
+    // laporan
+    public function laporan(Type $var = null)
+    {
+        $unit = new ModelUnit();
+        $data['unit'] = $unit->where('status_verifikasi !=', 1)->findAll();
+        // return $this->respond($data, 200);
+        return view('rpd/unit/data_laporan', $data);
     }
 
 }

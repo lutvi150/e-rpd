@@ -41,13 +41,19 @@ $routes->get('/logout', 'Home::logout');
 // administrator
 $routes->group('administrator', function ($routes) {
     $routes->get('/', 'Administrator::index');
+    // use for user
     $routes->get('data-user', 'Administrator::data_user');
     $routes->post('api/save-data-user/(:any)', 'Administrator::store_data_user/$1');
     $routes->post('api/edit-data-user', 'Administrator::edit_data_user');
     $routes->post('api/delete-data-user', 'Administrator::delete_data_user');
+    // use for unit
     $routes->get('data-unit', 'Administrator::data_unit');
     $routes->post('api/save-data-lembaga', 'Administrator::store_data_lembaga');
     $routes->post('api/delete-data-lembaga', 'Administrator::delete_data_lembaga');
+    // use for rpd
+    $routes->get('rpd', 'Administrator::rpd');
+    // laporan
+    $routes->get('laporan', 'Administrator::laporan');
 });
 // use for unit
 $routes->group('unit', function ($routes) {
@@ -67,6 +73,13 @@ $routes->group('unit', function ($routes) {
     $routes->post('api/update-pagu-perbulan', 'Unit::update_pagu_rincian_kegiatan_perbulan');
     // use for weekly data
     $routes->get('tambah-penarikan-mingguan/(:num)/(:num)/(:num)', 'Unit::tambah_penarikan_mingguan/$1/$2/$3');
+    $routes->post('api/update-penarikan-mingguan', 'Unit::update_rincian_perminggu');
+    // use for day draw
+    $routes->get('tambah-penarikan-harian/(:num)/(:num)/(:num)/(:num)/(:num)', 'Unit::tambah_penarikan_perhari/$1/$2/$3/$4/$5');
+    $routes->get('tambah-kegiatan-harian/(:num)/(:num)/(:num)/(:num)/(:num)', 'Unit::tambah_penarikan_perhari/$1/$2/$3/$4/$5');
+    $routes->post('api/update-penarikan-perhari', 'Unit::update_penarikan_perhari');
+    // use for make report
+    $routes->get('laporan', 'unit::laporan');
 });
 // use for api
 $routes->post('/api/login', 'Home::authorize');

@@ -68,13 +68,13 @@ at<?=$this->extend('layout/template');?>
                                         <tr>
 
                                             <?php for ($i = 1; $i <= 4; $i++): ?>
-                                            <td  style="text-align: center;">Minggu ke <br><?=$i?></td>
+                                            <td style="text-align: center;">Minggu ke <br><?=$i?></td>
                                             <?php endfor;?>
                                             <td></td>
                                         </tr>
                                         <tr>
                                             <td><?=$kegiatan->kode_kegiatan?></td>
-                                            <td style="font-weight: bold;" ><?=$kegiatan->uraian_kegiatan?></td>
+                                            <td style="font-weight: bold;"><?=$kegiatan->uraian_kegiatan?></td>
                                             <td>Rp. <?=number_format($kegiatan->pagu_kegiatan)?></td>
                                             <td></td>
                                             <td></td>
@@ -91,19 +91,26 @@ at<?=$this->extend('layout/template');?>
                                             <td style="text-align: right;"><?=$rincian_kegiatan->kode_rincian?></td>
                                             <td><?=$rincian_kegiatan->uraian_rincian_kegiatan?></td>
                                             <td>Rp. <?=number_format($rincian_kegiatan->pagu_rincian_kegiatan)?></td>
-                                            <?php?>
                                             <?php else: ?>
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                                <?php endif;?>
+                                            <?php endif;?>
                                             <td><?=$month[$value->bulan]->long_month?></td>
-                                            <td><?=number_format($value->total_pagu_perbulan)?></td>
-                                            <?php foreach ($value->week_data as $key => $value2): ?>
-                                            <td style="text-align: center;" class="week-draw" data-week="<?=$value2->minggu?>" data-pagu="<?=$value2->pagu?>" data-id_perbulan="<?=$value->id_rincian_kegiatan_perbulan?>" ><span><?=$value2->pagu?></span></td>
+                                            <td data-pagu="<?=$value->total_pagu_perbulan?>"
+                                                class="pagu_rincian_<?=$value->id_rincian_kegiatan_perbulan?>">
+                                                <?=number_format($value->total_pagu_perbulan)?></td>
+                                            <?php $total_mingguan = 0;foreach ($value->week_data as $key => $value2): ?>
+                                            <td style="text-align: center;"
+                                                class="week-draw field_<?=$value->id_rincian_kegiatan_perbulan . "_" . $value2->minggu?>"
+                                                data-week="<?=$value2->minggu?>" data-pagu="<?=$value2->pagu?>"
+                                                data-id_perbulan="<?=$value->id_rincian_kegiatan_perbulan?>">
+                                                <span><?=number_format($value2->pagu)?></span></td>
+                                            <?php $total_mingguan += $value2->pagu;?>
                                             <?php endforeach;?>
                                             <td>
-                                                <a href="" class="btn btn-success btn-xs" ><i class="fa fa-plus"></i> Rincian Harian</a>
+                                                <a href="/unit/tambah-penarikan-harian/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $rincian_kegiatan->id_rincian . "/" . $value->id_rincian_kegiatan_perbulan . "/" . $value->bulan?>" <?=$total_mingguan == $value->total_pagu_perbulan ? "" : 'style="display:none"'?> class="btn btn-success btn-xs btn_<?=$value->id_rincian_kegiatan_perbulan?>"><i
+                                                        class="fa fa-plus"></i> Rincian Harian</a>
                                             </td>
                                         </tr>
                                         <?php endforeach;?>
@@ -124,17 +131,16 @@ at<?=$this->extend('layout/template');?>
 <script>
     let base_url = "<?=base_url();?>";
     let id_lembaga = "<?=$lembaga->id_lembaga;?>";
-    let id_kegiatan = "<?=$kegiatan->id_kegiatan?>"
+    let id_kegiatan = "<?=$kegiatan->id_kegiatan?>";
     $(document).ready(function () {
         $('.week-draw').on('click', function () {
             var $e = $(this).parent();
-            var id_kegiatan = $(this).data('id_kegiatan');
-            var id_rincian = $(this).data('id_rincian');
-            var bulan = $(this).data('bulan');
+            var minggu = $(this).data('week');
+            var id_rincian = $(this).data('id_perbulan');
             var pagu = parseInt($(this).data('pagu'));
 
             let input =
-                `<input type="text"  onkeyup="update_total(${id_rincian},${bulan})"  class="form-control input_${id_rincian}_${bulan}" value="${pagu}" />`;
+                `<input type="text"  onkeyup="update_total(${id_rincian},${minggu})"  class="form-control input_${id_rincian}_${minggu}" value="${pagu}" />`;
             $(this).html(input);
             var $newE = $e.find('input');
             $newE.focus();
@@ -144,15 +150,55 @@ at<?=$this->extend('layout/template');?>
                     pagu = 0;
                 }
                 $(this).parent().html('<span>' + pagu + '</span>');
-                $(".field_" + id_rincian + "_" + bulan).data('pagu', pagu);
+                $(".field_" + id_rincian + "_" + minggu).data('pagu', pagu);
                 sessionStorage.setItem('data', JSON.stringify({
                     id_rincian_kegiatan: id_rincian,
-                    bulan: bulan,
+                    minggu: minggu,
                     total_pagu_perbulan: $(this).val()
                 }))
-                update_rincian_perbulan();
+                update_rincian();
             });
         });
     });
+    update_total = (id_rincian, bulan) => {
+        let pagu_normal = parseInt($(".pagu_rincian_" + id_rincian).data('pagu'));
+        let data = 0;
+        let name = "";
+        let name_input = "";
+        let nilai;
+        for (let index = 1; index <= 4; index++) {
+            name = id_rincian + "_" + index;
+            name_input = id_rincian + "_" + bulan;
+            if (name == name_input) {
+                nilai = parseInt($(".input_" + id_rincian + "_" + index).val());
+            } else {
+                nilai = parseInt($(".field_" + id_rincian + "_" + index).data('pagu'));
+            }
+            if (isNaN(nilai)) {
+                nilai = 0;
+            }
+            data += nilai;
+        }
+        console.log({pagu_normal,data});
+        if (pagu_normal === data) {
+            console.log('tampilkan');
+            $(".btn_" + id_rincian).removeAttr("style");
+        } else {
+            console.log('sembunyikan');
+            $(".btn_" + id_rincian).attr('style', 'display:none')
+        }
+    }
+    update_rincian = () => {
+        $.ajax({
+            type: "POST",
+            url: base_url + "/unit/api/update-penarikan-mingguan",
+            data: JSON.parse(sessionStorage.getItem('data')),
+            dataType: "JSON",
+            success: function (response) {},
+            error: function () {
+                Swal.fire('Something went wrong');
+            }
+        });
+    }
 </script>
 <?=$this->endSection();?>

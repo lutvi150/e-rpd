@@ -43,7 +43,7 @@
                                         <thead>
                                             <tr>
                                                 <th style="width:1%">No.</th>
-                                                <th>Nama Lembag</th>
+                                                <th>Nama Lembaga</th>
                                                 <th>Pengelolaa</th>
                                                 <th>Email</th>
                                                 <th style="width:10%">Aksi</th>

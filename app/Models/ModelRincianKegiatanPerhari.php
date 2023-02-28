@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ModelRincianKegiatanPerminggu extends Model
+class ModelRincianKegiatanPerhari extends Model
 {
     protected $DBGroup = 'default';
-    protected $table = 'table_rincian_kegiatan_perminggu';
-    protected $primaryKey = 'id_rincian_kegiatan_perminggu';
+    protected $table = 'table_rincian_kegiatan_perhari';
+    protected $primaryKey = 'id_rincian_kegiatan_perhari';
     protected $useAutoIncrement = true;
     protected $insertID = 0;
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['id_rincian_kegiatan_perbulan', 'minggu', 'total_pagu_perminggu'];
+    protected $allowedFields = ['id_rincian_kegiatan', 'bulan', 'rincian_perhari'];
 
     // Dates
     protected $useTimestamps = false;

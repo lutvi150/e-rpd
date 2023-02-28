@@ -23,6 +23,10 @@ class TableLembaga extends Migration
                 'type' => 'INT',
                 'constraint' => 11,
             ],
+            'status_verifikasi' => [
+                'type' => 'VARCHAR',
+                'constraint' => 5,
+            ],
         ]);
         $this->forge->addKey('id_lembaga', true);
         $this->forge->createTable('table_lembaga');

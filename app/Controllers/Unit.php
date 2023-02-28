@@ -12,7 +12,15 @@ class Unit extends BaseController
     use ResponseTrait;
     public function index()
     {
-        return view('rpd/unit/dashboard');
+        $db = \Config\Database::connect();
+        $session = \Config\Services::session();
+        $unit = new ModelUnit();
+
+        $kegiatan = $db->table('table_kegiatan as a');
+        $data['total_unit'] = $unit->where('id_pengelola', $session->get('id'))->countAllResults();
+        $data['kegiatan'] = $kegiatan->join('table_lembaga as b', 'a.id_lembaga=b.id_lembaga')->countAllResults();
+        // return $this->respond($data['kegiatan'], 200);exit;
+        return view('rpd/unit/dashboard', $data);
     }
     public function rpd(Type $var = null)
     {
@@ -309,6 +317,199 @@ class Unit extends BaseController
             ];
         }
         return $result_perminggu;
+    }
+    // update rincian perminggu
+    public function update_rincian_perminggu(Type $var = null)
+    {
+        $rincian_perminggu = new \App\Models\ModelRincianKegiatanPerminggu;
+        $id_rincian = $this->request->getPost('id_rincian_kegiatan');
+        $minggu = $this->request->getPost('minggu');
+        $pagu = $this->request->getPost('total_pagu_perbulan');
+        $insert = [
+            'id_rincian_kegiatan_perbulan' => $id_rincian,
+            'minggu' => $minggu,
+            'total_pagu_perminggu' => $pagu,
+        ];
+        $check = $rincian_perminggu->asObject()->where('id_rincian_kegiatan_perbulan', $id_rincian)->where('minggu', $minggu)->first();
+        if ($check) {
+            $rincian_perminggu->update($check->id_rincian_kegiatan_perminggu, $insert);
+            $msg = 'Update';
+        } else {
+            $rincian_perminggu->insert($insert);
+            $msg = 'Insert';
+        }
+        $response = [
+            'status' => 'success',
+            'msg' => $msg,
+        ];
+        return $this->respond($response, 200);
+    }
+    // penarikan perhari
+    public function tambah_penarikan_perhari($id_lembaga, $id_kegiatan, $id_rincian, $id_rincian_kegiatan_perbulan, $bulan)
+    {
+        $unit = new ModelUnit();
+        $kegiatan = new ModelKegiatan();
+        $rincian_kegiatan = new \App\Models\ModelRincianKegiatan;
+        $model_rincian_perhari = new \App\Models\ModelRincianKegiatanPerhari;
+        $data['kegiatan'] = $kegiatan->asObject()->find($id_kegiatan);
+        $data['lembaga'] = $unit->asObject()->find($id_lembaga);
+        $data['rincian_kegiatan'] = $rincian_kegiatan->asObject()->find($id_rincian);
+        $data['month'] = $this->month('convert')[$bulan];
+        $data['month_number'] = $bulan;
+        $get_date = $this->get_date($bulan);
+        $data['day_in_month'] = $get_date['date'];
+        $data['day'] = $get_date['day'];
+        $data['penarikan_perhari'] = json_decode($model_rincian_perhari->asObject()->where('bulan', $bulan)->where('id_rincian_kegiatan', $id_rincian)->first()->rincian_perhari);
+        // return $this->respond($data['penarikan_perhari'], 200);
+        return view('rpd/unit/data_penarikan_perhari', $data);
+    }
+    // get date in one month
+    public function get_date($month)
+    {
+        $year = date('Y');
+        $day = cal_days_in_month(CAL_GREGORIAN, $month, $year);
+        $new_date = [];
+        for ($i = 1; $i <= $day; $i++) {
+            $date = strtotime('2023-' . $month . '-' . $i);
+            $day_name = $this->convert_day_name(date('l', $date));
+            if ($day_name !== 'Minggu' && $day_name !== 'Sabtu') {
+                $new_date[] = [
+                    'date' => $i,
+                    'name' => $day_name,
+                ];
+            }
+
+        }
+        $default_table = 25;
+        $day_working = count($new_date);
+        $different_day = $default_table - $day_working;
+        $first_day = 0;
+        $end_day = 0;
+        if ($new_date[0]['name'] == 'Selasa') {
+            $end_day = $different_day - 1;
+            $first_day = $different_day - $end_day;
+        } elseif ($new_date[0]['name'] == 'Rabu') {
+            $end_day = $different_day - 2;
+            $first_day = $different_day - $end_day;
+        } elseif ($new_date[0]['name'] == 'Kamis') {
+            $end_day = $different_day - 3;
+            $first_day = $different_day - $end_day;
+        } elseif ($new_date[0]['name'] == 'Jumat') {
+            $end_day = $different_day - 4;
+            $first_day = $different_day - $end_day;
+        }
+        $array_first_day = [];
+        for ($i = 1; $i <= $first_day; $i++) {
+            $array_first_day[] = [
+                'date' => '-',
+                'name' => '-',
+            ];
+        }
+        $array_end_day = [];
+        for ($i = 1; $i <= $end_day; $i++) {
+            $array_end_day[] = [
+                'date' => '-',
+                'name' => '-',
+            ];
+        }
+        $combine1 = array_merge($array_first_day, (array) $new_date);
+        $combine1 = array_merge($combine1, $array_end_day);
+        $return_date = [
+            'count_date' => count((array) $new_date),
+            'add_day' => [
+                'a' => $first_day,
+                'b' => $end_day,
+            ],
+            'array_first_day' => $array_first_day,
+            'array_end_day' => $array_end_day,
+            'day' => $day,
+            'month' => $month,
+            'date' => (array_chunk((array) $combine1, 5)),
+        ];
+        return $return_date;
+    }
+    //tambah kegiatan harian
+    public function tambah_kegiatan_perhari($id_lembaga, $id_kegiatan, $id_rincian, $id_rincian_kegiatan_perbulan, $bulan)
+    {
+        $unit = new ModelUnit();
+        $kegiatan = new ModelKegiatan();
+        $rincian_kegiatan = new \App\Models\ModelRincianKegiatan;
+        $model_rincian_perhari = new \App\Models\ModelRincianKegiatanPerhari;
+        $data['kegiatan'] = $kegiatan->asObject()->find($id_kegiatan);
+        $data['lembaga'] = $unit->asObject()->find($id_lembaga);
+        $data['rincian_kegiatan'] = $rincian_kegiatan->asObject()->find($id_rincian);
+        $data['month'] = $this->month('convert')[$bulan];
+        $data['month_number'] = $bulan;
+        $get_date = $this->get_date($bulan);
+        $data['day_in_month'] = $get_date['date'];
+        $data['day'] = $get_date['day'];
+        $data['penarikan_perhari'] = json_decode($model_rincian_perhari->asObject()->where('bulan', $bulan)->where('id_rincian_kegiatan', $id_rincian)->first()->rincian_perhari);
+        // return $this->respond($data['penarikan_perhari'], 200);
+        return view('rpd/unit/data_penarikan_perhari', $data);
+    }
+    // update penarikan perhari
+    public function update_penarikan_perhari(Type $var = null)
+    {
+        $model_rincian_perhari = new \App\Models\ModelRincianKegiatanPerhari;
+        $id_rincian_kegiatan = $this->request->getPost('id_rincian_kegiatan');
+        $bulan = $this->request->getPost('bulan');
+        $rincian_perhari = $this->request->getPost('rincian_perhari');
+        $insert = [
+            'id_rincian_kegiatan' => $id_rincian_kegiatan,
+            'bulan' => $bulan,
+            'rincian_perhari' => json_encode($rincian_perhari),
+        ];
+        $check = $model_rincian_perhari->asObject()->where('bulan', $bulan)->where('id_rincian_kegiatan', $id_rincian_kegiatan)->first();
+        if ($check) {
+            $create = $model_rincian_perhari->update($check->id_rincian_kegiatan_perhari, $insert);
+            $msg = 'Update';
+        } else {
+            $msg = 'Insert';
+            $create = $model_rincian_perhari->insert($insert, false);
+        }
+        $response = [
+            'status' => 'success',
+            'msg' => 'insert',
+            'data' => $create,
+        ];
+        return $this->respond($response, 200);
+    }
+    public function convert_day_name($day_name)
+    {
+        switch ($day_name) {
+
+            case 'Sunday':
+                $day = 'Minggu';
+                break;
+            case 'Monday':
+                $day = 'Senin';
+                break;
+            case 'Tuesday':
+                $day = 'Selasa';
+                break;
+            case 'Wednesday':
+                $day = 'Rabu';
+                break;
+            case 'Thursday':
+                $day = 'Kamis';
+                break;
+            case 'Friday':
+                $day = 'Jumat';
+                break;
+            default:
+                $day = 'Sabtu';
+                break;
+        }
+        return $day;
+    }
+    // laporan
+    public function laporan(Type $var = null)
+    {
+        $session = \Config\Services::session();
+        $unit = new ModelUnit();
+        $data['unit'] = $unit->where('id_pengelola', $session->get('id'))->findAll();
+        // return $this->respond($data, 200);
+        return view('rpd/unit/data_laporan', $data);
     }
     // costume bulan
     public function month($status)
