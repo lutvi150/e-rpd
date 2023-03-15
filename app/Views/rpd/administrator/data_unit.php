@@ -44,8 +44,8 @@
                                             <tr>
                                                 <th style="width:1%">No.</th>
                                                 <th>Nama Lembaga</th>
-                                                <th>Pengelolaa</th>
-                                                <th>Email</th>
+                                                <!-- <th>Pengelolaa</th>
+                                                <th>Email</th> -->
                                                 <th style="width:10%">Aksi</th>
                                             </tr>
                                         </thead>
@@ -54,8 +54,8 @@
                                             <tr>
                                                 <td><?=$key + 1?></td>
                                                 <td><?=$value->nama_lembaga?></td>
-                                                <td><?=$value->nama_user?></td>
-                                                <td><?=$value->email?></td>
+                                                <!-- <td><?=$value->nama_user?></td>
+                                                <td><?=$value->email?></td> -->
                                                 <td>
                                                     <button type="button"
                                                         onclick="delete_data(<?=$value->id_lembaga?>)"
