@@ -54,9 +54,12 @@
                                             <td>Uraian</td>
                                             <td>Pagu (Rp)</td>
                                             <td>Jadwal Pelaksanaan</td>
-                                            <td style="width: 10px;"><button onclick="show_activity()" type="button"
+
+                                            <td style="width: 10px;">
+                                            <?php if ($lembaga->status_verifikasi == 1 || $lembaga->status_verifikasi == 4): ?><button onclick="show_activity()" type="button"
                                                     class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Tambah
-                                                    Kegiatan</button></td>
+                                                    Kegiatan</button><?php endif;?></td>
+
                                         </tr>
                                         <!-- use for data  -->
                                         <?php foreach ($activity as $key => $value): ?>
@@ -67,10 +70,12 @@
                                             <td><?=$month[$value->mulai_pelaksanaan - 1]['month'] . " - " . $month[$value->akhir_pelaksanaan - 1]['month']?>
                                             </td>
                                             <td style="text-align: center;">
+                                            <?php if ($lembaga->status_verifikasi == 1 || $lembaga->status_verifikasi == 4): ?>
                                                 <button onclick="delete_data(<?=$value->id_kegiatan?>)" type="button"
                                                     class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                                                 <button type="button" onclick="edit_data(<?=$value->id_kegiatan?>)"
                                                     class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button>
+                                                    <?php endif;?>
                                                     <a href="/unit/tambah-penarikan-bulanan/<?=$lembaga->id_lembaga . "/" . $value->id_kegiatan?>" class="btn btn-xs btn-success"><i class="fa fa-plus"></i> Penarikan Bulanan</a>
                                             </td>
                                         </tr>

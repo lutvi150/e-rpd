@@ -4,22 +4,20 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ModelUnit extends Model
+class ModelVerifikasiKegiatan extends Model
 {
     protected $DBGroup = 'default';
-    protected $table = 'table_lembaga';
-    protected $primaryKey = 'id_lembaga';
+    protected $table = 'table_verifikasi';
+    protected $primaryKey = 'id_verifikasi';
     protected $useAutoIncrement = true;
     protected $insertID = 0;
-    protected $returnType = 'object';
+    protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = [
-        'nama_lembaga', 'id_pengelola', 'status_verifikasi',
-    ];
+    protected $allowedFields = ['id_lembaga', 'status', 'comment', 'created_at'];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat = 'datetime';
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';

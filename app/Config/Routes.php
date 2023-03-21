@@ -38,6 +38,11 @@ $routes->set404Override();
 $routes->get('/', 'Home::login');
 $routes->get('/login', 'Home::login');
 $routes->get('/logout', 'Home::logout');
+// use for all
+$routes->group('all', function ($routes) {
+    $routes->post('api/update-status-verifikasi', 'Controller::verifikasi');
+    $routes->get('history-verifikasi/(:num)', 'Controller::history_verifikasi/$1');
+});
 // administrator
 $routes->group('administrator', function ($routes) {
     $routes->get('/', 'Administrator::index');

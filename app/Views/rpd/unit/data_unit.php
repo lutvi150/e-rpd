@@ -52,22 +52,38 @@
                                             <tr>
                                                 <td><?=$key + 1?></td>
                                                 <td><?=$value->nama_lembaga?></td>
-                                                <td>Rp.0</td>
+                                                <td>Rp.<?=number_format($value->pagu)?></td>
                                                 <td>
                                                     <?php if ($value->status_verifikasi == 1): ?>
-                                                    <span class="label label-danger"><i class="fa fa-ban"></i> Draf</span>
+                                                    <span class="label label-danger"><i class="fa fa-ban"></i>
+                                                        Draf</span>
                                                     <?php elseif ($value->status_verifikasi == 2): ?>
-                                                    <span class="label label-warning"><i class="fa fa-refresh"></i> Proses Verifikasi</span>
+                                                    <span class="label label-warning"><i class="fa fa-refresh"></i>
+                                                        Proses Verifikasi</span>
                                                     <?php elseif ($value->status_verifikasi == 3): ?>
-                                                    <span class="label label-success"><i class="fa fa-check"></i> Terverifikasi</span>
+                                                    <span class="label label-success"><i class="fa fa-check"></i>
+                                                        Terverifikasi</span>
                                                     <?php endif;?>
                                                 </td>
                                                 <td style="width: 10px;">
+
                                                     <a href="<?=base_url('unit/tambah-kegiatan/' . $value->id_lembaga)?>"
-                                                        class="btn btn-success btn-xs"><i
-                                                            class="fa fa-plus"></i> Tambah Kegiatan</a>
-                                                    <button type="button" class="btn btn-success btn-xs"><i class="fa fa-send"></i> Ajukan Verifikasi</button>
-                                                    <button type="button" class="btn btn-warning btn-xs"><i class="fa fa-book"></i> History Pengajuan</button>
+                                                        class="btn btn-success btn-xs">  <?php if ($value->status_verifikasi == 1 || $value->status_verifikasi == 4): ?>
+                                                        <i class="fa fa-plus"></i> Tambah
+                                                        Kegiatan
+                                                        <?php else: ?>
+                                                            <i class="fa fa-search"></i> Priview
+                                                        Kegiatan
+                                                        <?php endif;?>
+                                                    </a>
+
+                                                        <?php if ($value->status_verifikasi == 1 || $value->status_verifikasi == 4): ?>
+                                                    <button type="button" class="btn btn-success btn-xs btn-verifikasi"
+                                                        data-id="<?=$value->id_lembaga?>"><i class="fa fa-send"></i>
+                                                        Ajukan Verifikasi</button>
+                                                        <?php endif;?>
+                                                    <a href="<?=base_url('all/history-verifikasi/' . $value->id_lembaga)?>" class="btn btn-warning btn-xs"><i
+                                                            class="fa fa-book"></i> History Pengajuan</a>
                                                 </td>
                                             </tr>
                                             <?php endforeach;?>
@@ -138,7 +154,9 @@
                 $.ajax({
                     type: "POST",
                     url: "<?=base_url('/administrator/api/delete-data-lembaga')?>",
-                    data: {id_lembaga:id},
+                    data: {
+                        id_lembaga: id
+                    },
                     dataType: "JSON",
                     success: function (response) {
                         if (response.status == 'success') {
@@ -154,5 +172,36 @@
             }
         })
     }
+    $(".btn-verifikasi").click(function (e) {
+        Swal.fire({
+            title: 'Kamu ingin minta verifikasi, selama proses verifikasi data tidak bisa di ubah?',
+            showDenyButton: true,
+            confirmButtonText: 'Ya',
+            denyButtonText: `Tidak`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                let id_lembaga = $(this).data('id');
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url('all/api/update-status-verifikasi')?>",
+                    data: {id_lembaga:id_lembaga,status:'verifikasi'},
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response.status == 'success') {
+                            Swal.fire('Verifikasi Telah di Kirim', '', 'success').then(
+                        () => {
+                                location.reload();
+                            });
+                        }
+                    },error:function(){
+                        Swal.fire('Something Wrong','','info');
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire('Verifikasi Tidak di Kirim', '', 'info')
+            }
+        })
+    });
 </script>
 <?=$this->endSection();?>

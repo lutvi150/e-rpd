@@ -120,10 +120,16 @@ $jumlah = 0;foreach ($value as $key3 => $value2): ?>
         break;
     }
 }?>
+  <?php if ($lembaga->status_verifikasi == 1 || $lembaga->status_verifikasi == 4): ?>
                                                     <input
                                                     onkeyup="update_total(<?=$value2['date']?>)" type="text"
                                                     class="form-control key_<?=$key?> date_<?=$value2['date']?>"
                                                     data-tanggal="<?=$value2['date']?>" data-pagu="<?=$pagu_perhari?>" value="<?=$pagu_perhari?>">
+                                                    <?php else: ?>
+                                                        <input readonly type="text"
+                                                    class="form-control key_<?=$key?> date_<?=$value2['date']?>"
+                                                    data-tanggal="<?=$value2['date']?>" data-pagu="<?=$pagu_perhari?>" value="<?=$pagu_perhari?>">
+                                                        <?php endif;?>
                                                 <?php else: ?>
                                                 -
                                                 <?php endif;?>

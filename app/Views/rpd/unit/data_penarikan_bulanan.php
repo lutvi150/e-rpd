@@ -58,9 +58,12 @@
                                             <td><?=$value['month']?></td>
                                             <?php endforeach;?>
                                             <td>Jumlah</td>
-                                            <td style="width: 10px;"><button onclick="show_modal()" type="button"
+                                            <td style="width: 10px;">
+                                            <?php if ($lembaga->status_verifikasi == 1 || $lembaga->status_verifikasi == 4): ?>
+                                            <button onclick="show_modal()" type="button"
                                                     class="btn btn-success btn-xs"><i class="fa fa-plus"></i> Tambah
-                                                    Rincian</button></td>
+                                                    Rincian</button>
+                                            <?php endif;?></td>
                                         </tr>
                                         <tr>
                                             <td><?=$kegiatan->kode_kegiatan?></td>
@@ -106,10 +109,12 @@ if ($i == 13) {
                                             </td>
                                             <?php endfor;?>
                                             <td class="text-center">
+                                            <?php if ($lembaga->status_verifikasi == 1 || $lembaga->status_verifikasi == 4): ?>
                                                 <button type="button" onclick="delete_data(<?=$value->id_rincian?>)"
                                                     class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                                                 <button type="button" onclick="edit_data(<?=$value->id_rincian?>)"
                                                     class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button>
+                                                    <?php endif;?>
                                                     <a <?=$value->pagu_rincian_kegiatan == $total ? '' : 'style="display: none;"'?>  href="/unit/tambah-penarikan-mingguan/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $value->id_rincian?>" class="btn btn-success btn-xs btn_<?=$value->id_rincian?>"><i class="fa fa-plus"></i> Penarikan Mingguan</a>
                                             </td>
                                         </tr>
@@ -168,6 +173,8 @@ if ($i == 13) {
     let id_kegiatan = "<?=$kegiatan->id_kegiatan?>"
     $(document).ready(function () {
         document.body.style.zoom = "80%";
+     <?php if ($lembaga->status_verifikasi == 1 || $lembaga->status_verifikasi == 4): ?>
+
         $('.pagu_perbulan').on('click', function () {
             var $e = $(this).parent();
             var id_kegiatan = $(this).data('id_kegiatan');
@@ -195,6 +202,7 @@ if ($i == 13) {
                 update_rincian_perbulan();
             });
         });
+        <?php endif;?>
     });
     update_total = (id_rincian, bulan) => {
         let pagu_normal = parseInt($(".pagu_" + id_rincian).data('pagu'));

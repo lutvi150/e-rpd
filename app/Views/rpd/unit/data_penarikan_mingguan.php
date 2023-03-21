@@ -133,6 +133,7 @@ at<?=$this->extend('layout/template');?>
     let id_lembaga = "<?=$lembaga->id_lembaga;?>";
     let id_kegiatan = "<?=$kegiatan->id_kegiatan?>";
     $(document).ready(function () {
+        <?php if ($lembaga->status_verifikasi == 1 || $lembaga->status_verifikasi == 4): ?>
         $('.week-draw').on('click', function () {
             var $e = $(this).parent();
             var minggu = $(this).data('week');
@@ -159,6 +160,7 @@ at<?=$this->extend('layout/template');?>
                 update_rincian();
             });
         });
+        <?php endif;?>
     });
     update_total = (id_rincian, bulan) => {
         let pagu_normal = parseInt($(".pagu_rincian_" + id_rincian).data('pagu'));
@@ -179,12 +181,10 @@ at<?=$this->extend('layout/template');?>
             }
             data += nilai;
         }
-        console.log({pagu_normal,data});
         if (pagu_normal === data) {
             console.log('tampilkan');
             $(".btn_" + id_rincian).removeAttr("style");
         } else {
-            console.log('sembunyikan');
             $(".btn_" + id_rincian).attr('style', 'display:none')
         }
     }

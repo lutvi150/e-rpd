@@ -27,7 +27,27 @@ class Unit extends BaseController
         $session = \Config\Services::session();
         $id_pengelola = $session->get('id');
         $unit = new ModelUnit();
-        $data['unit'] = $unit->where('id_pengelola', $id_pengelola)->findAll();
+        $kegiatan = new \App\Models\ModelKegiatan;
+        $data_unit = $unit->where('id_pengelola', $id_pengelola)->findAll();
+        $result_unit = [];
+        if ($data_unit) {
+            foreach ($data_unit as $key => $value) {
+                $pagu = $kegiatan->asObject()->where('id_lembaga', $value->id_lembaga)->selectSum('pagu_kegiatan')->findAll()[0]->pagu_kegiatan;
+                if ($pagu) {
+                    $pagu = $pagu;
+                } else {
+                    $pagu = 0;
+                }
+                $result_unit[] = (object) [
+                    'id_lembaga' => $value->id_lembaga,
+                    'nama_lembaga' => $value->nama_lembaga,
+                    'id_pengelola' => $value->id_pengelola,
+                    'status_verifikasi' => $value->status_verifikasi,
+                    'pagu' => $pagu,
+                ];
+            }
+        }
+        $data['unit'] = $result_unit;
         // return $this->respond($data, 200);
         // exit;
         return view('rpd/unit/data_unit', $data);
