@@ -55,6 +55,15 @@ $routes->group('administrator', function ($routes) {
     $routes->get('data-unit', 'Administrator::data_unit');
     $routes->post('api/save-data-lembaga', 'Administrator::store_data_lembaga');
     $routes->post('api/delete-data-lembaga', 'Administrator::delete_data_lembaga');
+    // kegiatan
+    $routes->get('tambah-kegiatan/(:num)', 'Administrator::tambah_kegiatan/$1');
+    // penarikan bulanan
+    $routes->get('tambah-penarikan-bulanan/(:num)/(:num)', 'Administrator::tambah_penarikan_bulanan/$1/$2');
+    // use for weekly data
+    $routes->get('tambah-penarikan-mingguan/(:num)/(:num)/(:num)', 'Administrator::tambah_penarikan_mingguan/$1/$2/$3');
+    // use for day draw
+    $routes->get('tambah-penarikan-harian/(:num)/(:num)/(:num)/(:num)/(:num)', 'Administrator::tambah_penarikan_perhari/$1/$2/$3/$4/$5');
+    $routes->get('tambah-kegiatan-harian/(:num)/(:num)/(:num)/(:num)/(:num)', 'Administrator::tambah_penarikan_perhari/$1/$2/$3/$4/$5');
     // use for rpd
     $routes->get('rpd', 'Administrator::rpd');
     // laporan

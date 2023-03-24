@@ -14,7 +14,7 @@
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>History : <?=$lembaga->nama_lembaga?></h2>
+                        <h2>Unit/Lembaga : <?=$lembaga->nama_lembaga?></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -55,72 +55,37 @@
                                     </div>
                                     <div class="x_content">
                                         <ul class="list-unstyled timeline">
+                                            <?php foreach ($verifikasi as $key => $value): ?>
                                             <li>
                                                 <div class="block">
-                                                    <div class="tags">
+                                                <?php if ($value->status == 1) {
+    $status = 'Draf';
+} elseif ($value->status == 2) {
+    $status = 'Verifikasi';
+} elseif ($value->status == 3) {
+    $status = 'Terverifikasi';
+} else {
+    $status = 'Revisi';
+}?>
+                                                    <div class="tags btn-"  >
                                                         <a href="" class="tag">
-                                                            <span>Entertainment</span>
+
+                                                            <span><?=$status?></span>
                                                         </a>
                                                     </div>
                                                     <div class="block_content">
                                                         <h2 class="title">
-                                                            <a>Who Needs Sundance When You’ve Got&nbsp;Crowdfunding?</a>
+                                                            <a>Status Verifikasi</a>
                                                         </h2>
                                                         <div class="byline">
-                                                            <span>13 hours ago</span> by <a>Jane Smith</a>
+                                                            <span>Dibuat pada: <?=$value->created_at?></span> Oleh <a><?=$value->nama_user?></a>
                                                         </div>
-                                                        <p class="excerpt">Film festivals used to be do-or-die moments
-                                                            for movie makers. They were where you met the producers that
-                                                            could fund your project, and if the buyers liked your flick,
-                                                            they’d pay to Fast-forward and… <a>Read&nbsp;More</a>
+                                                        <p class="excerpt"><?=$value->comment?>
                                                         </p>
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li>
-                                                <div class="block">
-                                                    <div class="tags">
-                                                        <a href="" class="tag">
-                                                            <span>Entertainment</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="block_content">
-                                                        <h2 class="title">
-                                                            <a>Who Needs Sundance When You’ve Got&nbsp;Crowdfunding?</a>
-                                                        </h2>
-                                                        <div class="byline">
-                                                            <span>13 hours ago</span> by <a>Jane Smith</a>
-                                                        </div>
-                                                        <p class="excerpt">Film festivals used to be do-or-die moments
-                                                            for movie makers. They were where you met the producers that
-                                                            could fund your project, and if the buyers liked your flick,
-                                                            they’d pay to Fast-forward and… <a>Read&nbsp;More</a>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="block">
-                                                    <div class="tags">
-                                                        <a href="" class="tag">
-                                                            <span>Entertainment</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="block_content">
-                                                        <h2 class="title">
-                                                            <a>Who Needs Sundance When You’ve Got&nbsp;Crowdfunding?</a>
-                                                        </h2>
-                                                        <div class="byline">
-                                                            <span>13 hours ago</span> by <a>Jane Smith</a>
-                                                        </div>
-                                                        <p class="excerpt">Film festivals used to be do-or-die moments
-                                                            for movie makers. They were where you met the producers that
-                                                            could fund your project, and if the buyers liked your flick,
-                                                            they’d pay to Fast-forward and… <a>Read&nbsp;More</a>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                            <?php endforeach;?>
                                         </ul>
 
                                     </div>

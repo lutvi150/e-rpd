@@ -4,7 +4,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Data Kegiatan Unit </h3>
+                <h3>Data Kegiatan Unit/ Lembaga </h3>
             </div>
         </div>
 
@@ -14,7 +14,7 @@
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Data : <?=$lembaga->nama_lembaga?></h2>
+                        <h2>Unit/Lembaga : <?=$lembaga->nama_lembaga?></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -35,7 +35,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card-box table-responsive">
-                                    <a href="/unit/rpd" class="btn btn-info btn-xs"><i class="fa fa-reply"></i>Kembali</a>
+                                    <a href="/unit/rpd" class="btn btn-info btn-xs"><i class="fa fa-reply"></i> Kembali</a>
                                     <table class="table table-bordered">
                                         <tr>
                                             <td colspan="2">Kementrian Negara/ Lembaga</td>

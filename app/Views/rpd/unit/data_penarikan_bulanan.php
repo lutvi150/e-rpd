@@ -14,7 +14,7 @@
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Data : <?=$lembaga->nama_lembaga?></h2>
+                        <h2>Unit/Lembaga : <?=$lembaga->nama_lembaga?></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -36,7 +36,7 @@
                             <div class="col-sm-12">
                                 <div class="card-box table-responsive">
                                     <a href="/unit/tambah-kegiatan/<?=$lembaga->id_lembaga?>"
-                                        class="btn btn-info btn-xs"><i class="fa fa-reply"></i>Kembali</a>
+                                        class="btn btn-info btn-xs"><i class="fa fa-reply"></i> Kembali</a>
                                     <table class="table table-bordered" id="table-rincian-kegiatan">
                                         <tr>
                                             <td colspan="3">Kementrian Negara/ Lembaga</td>
@@ -105,7 +105,7 @@ if ($i == 13) {
                                                 class="<?=$i == 13 ? '' : 'pagu_perbulan'?> field_<?=$value->id_rincian?>_<?=$i?>">
                                                 <span
                                                 <?=$i == 13 ? ($value->pagu_rincian_kegiatan == $total ? 'style="color:green"' : 'style="color:red"') : '';?>
-                                                    class="span_<?=$value->id_rincian?>_<?=$i?>"><?=number_format($i == 13 ? $total : $pagu)?></span>
+                                                    class="span_<?=$value->id_rincian?>_<?=$i?>"><?=number_format($i == 13 ? $total : $pagu)?> <?=$i == 13 ? ($value->pagu_rincian_kegiatan == $total ? '' : '<br><label class="label label-danger">Belum Balance</label>') : '';?></span>
                                             </td>
                                             <?php endfor;?>
                                             <td class="text-center">
@@ -227,7 +227,7 @@ if ($i == 13) {
             $(".span_" + id_rincian + "_" + 13).text(data).attr('style','color:green');
             $(".btn_"+id_rincian).removeAttr("style");
         } else {
-            $(".span_" + id_rincian + "_" + 13).text(data).attr('style', 'color:red');
+            $(".span_" + id_rincian + "_" + 13).html(data+`<br><label class="label label-danger">Belum Balance</label>`).attr('style', 'color:red');
             $(".btn_"+id_rincian).attr('style','display:none')
         }
     }

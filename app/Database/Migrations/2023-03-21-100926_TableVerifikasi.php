@@ -25,10 +25,23 @@ class TableVerifikasi extends Migration
             'comment' => [
                 'type' => 'TEXT',
             ],
+            'crated_by' => [
+                'type' => 'INT',
+                'constraint' => 10,
+            ],
             'created_at' => [
                 'type' => 'VARCHAR',
                 'constraint' => 50,
             ],
+            'updated_at' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
+            'deleted_at' => [
+                'type' => 'VARCHAR',
+                'constraint' => 50,
+            ],
+
         ]);
         $this->forge->addKey('id_verifikasi', true);
         $this->forge->createTable('table_verifikasi');

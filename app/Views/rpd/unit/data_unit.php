@@ -4,7 +4,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Data Unit</h3>
+                <h3>Data Unit/ Lembaga</h3>
             </div>
         </div>
 
@@ -14,7 +14,7 @@
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Data Unit Kampus</h2>
+                        <h2>Data Unit/ Lembaga Kampus</h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -63,6 +63,9 @@
                                                     <?php elseif ($value->status_verifikasi == 3): ?>
                                                     <span class="label label-success"><i class="fa fa-check"></i>
                                                         Terverifikasi</span>
+                                                        <?php elseif ($value->status_verifikasi == 4): ?>
+                                                            <span class="label label-danger"><i class="fa fa-refresh"></i>
+                                                        Revisi</span>
                                                     <?php endif;?>
                                                 </td>
                                                 <td style="width: 10px;">
@@ -185,7 +188,7 @@
                 $.ajax({
                     type: "POST",
                     url: "<?=base_url('all/api/update-status-verifikasi')?>",
-                    data: {id_lembaga:id_lembaga,status:'verifikasi'},
+                    data: {id_lembaga:id_lembaga,status:2},
                     dataType: "JSON",
                     success: function (response) {
                         if (response.status == 'success') {

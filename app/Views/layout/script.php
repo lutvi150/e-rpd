@@ -38,3 +38,4 @@
 <!-- use for chart js -->
 <script src="<?=base_url();?>assets/theme/gentella/vendors/Chart.js/dist/Chart.js"></script>
 <script src="<?=base_url();?>/assets/others/sweetalert2-11.6.16/dist/sweetalert2.all.min.js"></script>
+<script src="<?=base_url();?>/assets/theme/gentella/vendors/ckeditor/ckeditor.js"></script>
