@@ -59,11 +59,11 @@
                                                 <td><?=$key + 1?></td>
                                                 <td><?=$value->nama_lembaga?></td>
                                                 <td>Rp.<?=number_format($value->pagu)?></td>
-                                                <td class="text-center" ><a target="_blank" href="" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
-                                                <td class="text-center"><a target="_blank" href="" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
-                                                <td class="text-center"><a target="_blank" href="" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
-                                                <td class="text-center"><a target="_blank" href="" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
-                                                <td class="text-center"><a target="_blank" href="" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
+                                                <td class="text-center" ><a target="_blank" href="/report/kegiatan/<?=$value->id_lembaga?>" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
+                                                <td class="text-center"><a target="_blank" href="/report/bulanan/<?=$value->id_lembaga?>" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
+                                                <td class="text-center"><a target="_blank" href="/report/mingguan/<?=$value->id_lembaga?>" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
+                                                <td class="text-center"><a target="_blank" href="/report/kalender_kegiatan/<?=$value->id_lembaga?>" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
+                                                <td class="text-center"><a target="_blank" href="/report/penarikan_harian/<?=$value->id_lembaga?>" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
                                             </tr>
                                             <?php endforeach;?>
                                         </tbody>

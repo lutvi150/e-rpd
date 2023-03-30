@@ -14,7 +14,7 @@ class ModelVerifikasiKegiatan extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['id_lembaga', 'status', 'comment', 'created_at'];
+    protected $allowedFields = ['id_lembaga', 'status', 'comment', 'created_at', 'created_by'];
 
     // Dates
     protected $useTimestamps = true;

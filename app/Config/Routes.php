@@ -43,6 +43,8 @@ $routes->group('all', function ($routes) {
     $routes->post('api/update-status-verifikasi', 'Controller::verifikasi');
     $routes->get('history-verifikasi/(:num)', 'Controller::history_verifikasi/$1');
 });
+// use for make report
+$routes->get('report/(:any)/(:num)', 'Controller::make_report/$1/$2');
 // administrator
 $routes->group('administrator', ['filter' => 'authenticate'], function ($routes) {
     $routes->get('/', 'Administrator::index');
