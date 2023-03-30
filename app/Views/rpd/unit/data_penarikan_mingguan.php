@@ -20,7 +20,7 @@ at<?=$this->extend('layout/template');?>
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Data : <?=$lembaga->nama_lembaga?></h2>
+                        <h2>Unit/Lembaga : <?=$lembaga->nama_lembaga?></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -42,7 +42,7 @@ at<?=$this->extend('layout/template');?>
                             <div class="col-sm-12">
                                 <div class="card-box table-responsive">
                                     <a href="/unit/tambah-penarikan-bulanan/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan?>"
-                                        class="btn btn-info btn-xs"><i class="fa fa-reply"></i>Kembali</a>
+                                        class="btn btn-info btn-xs"><i class="fa fa-reply"></i> Kembali</a>
                                     <table class="table table-bordered" id="table-rincian-kegiatan">
                                         <tr>
                                             <td colspan="3">Kementrian Negara/ Lembaga</td>
@@ -109,7 +109,7 @@ at<?=$this->extend('layout/template');?>
                                             <?php $total_mingguan += $value2->pagu;?>
                                             <?php endforeach;?>
                                             <td>
-                                                <a href="/unit/tambah-penarikan-harian/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $rincian_kegiatan->id_rincian . "/" . $value->id_rincian_kegiatan_perbulan . "/" . $value->bulan?>" <?=$total_mingguan == $value->total_pagu_perbulan ? "" : 'style="display:none"'?> class="btn btn-success btn-xs btn_<?=$value->id_rincian_kegiatan_perbulan?>"><i
+                                                <a href="/unit/tambah-penarikan-harian/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $rincian_kegiatan->id_rincian . "/" . $value->id_rincian_kegiatan_perbulan . "/" . $value->bulan . "/penarikan"?>" <?=$total_mingguan == $value->total_pagu_perbulan ? "" : 'style="display:none"'?> class="btn btn-success btn-xs btn_<?=$value->id_rincian_kegiatan_perbulan?>"><i
                                                         class="fa fa-plus"></i> Rincian Harian</a>
                                             </td>
                                         </tr>

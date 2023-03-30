@@ -26,6 +26,9 @@ class TableRincianKegiatanPerhari extends Migration
             'rincian_perhari' => [
                 'type' => 'TEXT',
             ],
+            'rincian_kegiatan_perhari' => [
+                'type' => 'TEXT',
+            ],
         ]);
         $this->forge->addKey('id_rincian_kegiatan_perhari', true);
         $this->forge->createTable('table_rincian_kegiatan_perhari');

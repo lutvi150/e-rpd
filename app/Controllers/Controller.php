@@ -39,9 +39,8 @@ class Controller extends BaseController
         $lembaga = new \App\Models\ModelUnit;
         $verifikasi = $db->table('table_verifikasi as a');
         $data['lembaga'] = $lembaga->find($id_lembaga);
-        $data['verifikasi'] = $verifikasi->where('a.id_lembaga', $id_lembaga)->join('table_user as b', 'a.created_by=b.id')->select('a.*,b.nama_user')->get()->getResult();
-        // return $this->respond($data, 200);
-        // exit;
+        $data['verifikasi'] = $verifikasi->where('a.id_lembaga', $id_lembaga)->join('table_user as b', 'a.created_by=b.id')->select('a.*,b.nama_user')->orderBy('created_at', 'desc')->get()->getResult();
+        // return $this->respond($data, 200);exit;
         return view('rpd/unit/data_history_pengajuan', $data);
     }
 }

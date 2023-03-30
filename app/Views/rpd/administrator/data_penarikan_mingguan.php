@@ -109,7 +109,7 @@ at<?=$this->extend('layout/template');?>
                                             <?php $total_mingguan += $value2->pagu;?>
                                             <?php endforeach;?>
                                             <td>
-                                                <a href="/administrator/tambah-penarikan-harian/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $rincian_kegiatan->id_rincian . "/" . $value->id_rincian_kegiatan_perbulan . "/" . $value->bulan?>" <?=$total_mingguan == $value->total_pagu_perbulan ? "" : 'style="display:none"'?> class="btn btn-success btn-xs btn_<?=$value->id_rincian_kegiatan_perbulan?>"><i
+                                            <a href="/administrator/tambah-penarikan-harian/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $rincian_kegiatan->id_rincian . "/" . $value->id_rincian_kegiatan_perbulan . "/" . $value->bulan . "/penarikan"?>" <?=$total_mingguan == $value->total_pagu_perbulan ? "" : 'style="display:none"'?> class="btn btn-success btn-xs btn_<?=$value->id_rincian_kegiatan_perbulan?>"><i
                                                         class="fa fa-plus"></i> Rincian Harian</a>
                                             </td>
                                         </tr>

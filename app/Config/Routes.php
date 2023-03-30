@@ -25,7 +25,7 @@ $routes->set404Override();
 // where controller filters or CSRF protection are bypassed.
 // If you don't want to define all routes, please use the Auto Routing (Improved).
 // Set `$autoRoutesImproved` to true in `app/Config/Feature.php` and set the following to true.
-// $routes->setAutoRoute(false);
+$routes->setAutoRoute(false);
 
 /*
  * --------------------------------------------------------------------
@@ -44,7 +44,7 @@ $routes->group('all', function ($routes) {
     $routes->get('history-verifikasi/(:num)', 'Controller::history_verifikasi/$1');
 });
 // administrator
-$routes->group('administrator', function ($routes) {
+$routes->group('administrator', ['filter' => 'authenticate'], function ($routes) {
     $routes->get('/', 'Administrator::index');
     // use for user
     $routes->get('data-user', 'Administrator::data_user');
@@ -62,15 +62,14 @@ $routes->group('administrator', function ($routes) {
     // use for weekly data
     $routes->get('tambah-penarikan-mingguan/(:num)/(:num)/(:num)', 'Administrator::tambah_penarikan_mingguan/$1/$2/$3');
     // use for day draw
-    $routes->get('tambah-penarikan-harian/(:num)/(:num)/(:num)/(:num)/(:num)', 'Administrator::tambah_penarikan_perhari/$1/$2/$3/$4/$5');
-    $routes->get('tambah-kegiatan-harian/(:num)/(:num)/(:num)/(:num)/(:num)', 'Administrator::tambah_penarikan_perhari/$1/$2/$3/$4/$5');
+    $routes->get('tambah-penarikan-harian/(:num)/(:num)/(:num)/(:num)/(:num)/(:any)', 'Administrator::tambah_penarikan_perhari/$1/$2/$3/$4/$5/$6');
     // use for rpd
     $routes->get('rpd', 'Administrator::rpd');
     // laporan
     $routes->get('laporan', 'Administrator::laporan');
 });
 // use for unit
-$routes->group('unit', function ($routes) {
+$routes->group('unit', ['filter' => 'authenticate'], function ($routes) {
     $routes->get('/', 'Unit::index');
     $routes->get('rpd', 'Unit::rpd');
     // kegiatan
@@ -89,8 +88,7 @@ $routes->group('unit', function ($routes) {
     $routes->get('tambah-penarikan-mingguan/(:num)/(:num)/(:num)', 'Unit::tambah_penarikan_mingguan/$1/$2/$3');
     $routes->post('api/update-penarikan-mingguan', 'Unit::update_rincian_perminggu');
     // use for day draw
-    $routes->get('tambah-penarikan-harian/(:num)/(:num)/(:num)/(:num)/(:num)', 'Unit::tambah_penarikan_perhari/$1/$2/$3/$4/$5');
-    $routes->get('tambah-kegiatan-harian/(:num)/(:num)/(:num)/(:num)/(:num)', 'Unit::tambah_penarikan_perhari/$1/$2/$3/$4/$5');
+    $routes->get('tambah-penarikan-harian/(:num)/(:num)/(:num)/(:num)/(:num)/(:any)', 'Unit::tambah_penarikan_perhari/$1/$2/$3/$4/$5/$6');
     $routes->post('api/update-penarikan-perhari', 'Unit::update_penarikan_perhari');
     // use for make report
     $routes->get('laporan', 'unit::laporan');

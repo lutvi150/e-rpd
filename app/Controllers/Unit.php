@@ -364,25 +364,6 @@ class Unit extends BaseController
         ];
         return $this->respond($response, 200);
     }
-    // penarikan perhari
-    public function tambah_penarikan_perhari($id_lembaga, $id_kegiatan, $id_rincian, $id_rincian_kegiatan_perbulan, $bulan)
-    {
-        $unit = new ModelUnit();
-        $kegiatan = new ModelKegiatan();
-        $rincian_kegiatan = new \App\Models\ModelRincianKegiatan;
-        $model_rincian_perhari = new \App\Models\ModelRincianKegiatanPerhari;
-        $data['kegiatan'] = $kegiatan->asObject()->find($id_kegiatan);
-        $data['lembaga'] = $unit->asObject()->find($id_lembaga);
-        $data['rincian_kegiatan'] = $rincian_kegiatan->asObject()->find($id_rincian);
-        $data['month'] = $this->month('convert')[$bulan];
-        $data['month_number'] = $bulan;
-        $get_date = $this->get_date($bulan);
-        $data['day_in_month'] = $get_date['date'];
-        $data['day'] = $get_date['day'];
-        $data['penarikan_perhari'] = json_decode($model_rincian_perhari->asObject()->where('bulan', $bulan)->where('id_rincian_kegiatan', $id_rincian)->first()->rincian_perhari);
-        // return $this->respond($data['penarikan_perhari'], 200);
-        return view('rpd/unit/data_penarikan_perhari', $data);
-    }
     // get date in one month
     public function get_date($month)
     {
@@ -449,12 +430,20 @@ class Unit extends BaseController
         return $return_date;
     }
     //tambah kegiatan harian
-    public function tambah_kegiatan_perhari($id_lembaga, $id_kegiatan, $id_rincian, $id_rincian_kegiatan_perbulan, $bulan)
+    public function tambah_penarikan_perhari($id_lembaga, $id_kegiatan, $id_rincian, $id_rincian_kegiatan_perbulan, $bulan, $type)
     {
         $unit = new ModelUnit();
         $kegiatan = new ModelKegiatan();
         $rincian_kegiatan = new \App\Models\ModelRincianKegiatan;
         $model_rincian_perhari = new \App\Models\ModelRincianKegiatanPerhari;
+        $data['uri'] = (object) [
+            'id_lembaga' => $id_lembaga,
+            'id_kegiatan' => $id_kegiatan,
+            'id_rincian' => $id_rincian,
+            'id_rincian_kegiatan_perbulan' => $id_rincian_kegiatan_perbulan,
+            'bulan' => $bulan,
+            'type' => $type,
+        ];
         $data['kegiatan'] = $kegiatan->asObject()->find($id_kegiatan);
         $data['lembaga'] = $unit->asObject()->find($id_lembaga);
         $data['rincian_kegiatan'] = $rincian_kegiatan->asObject()->find($id_rincian);
@@ -463,9 +452,22 @@ class Unit extends BaseController
         $get_date = $this->get_date($bulan);
         $data['day_in_month'] = $get_date['date'];
         $data['day'] = $get_date['day'];
-        $data['penarikan_perhari'] = json_decode($model_rincian_perhari->asObject()->where('bulan', $bulan)->where('id_rincian_kegiatan', $id_rincian)->first()->rincian_perhari);
-        // return $this->respond($data['penarikan_perhari'], 200);
-        return view('rpd/unit/data_penarikan_perhari', $data);
+        $rincian = $model_rincian_perhari->asObject()->where('bulan', $bulan)->where('id_rincian_kegiatan', $id_rincian)->first();
+        if ($type == 'penarikan') {
+            $page = 'rpd/unit/data_penarikan_perhari';
+            $data['penarikan_perhari'] = [];
+            if ($rincian->rincian_perhari) {
+                $data['penarikan_perhari'] = json_decode($rincian->rincian_perhari);
+            }
+        } else {
+            $page = 'rpd/unit/data_kegiatan_harian';
+            $data['kegiatan_perhari'] = [];
+            if ($rincian->rincian_kegiatan_perhari) {
+                $data['kegiatan_perhari'] = json_decode($rincian->rincian_kegiatan_perhari);
+            }
+        }
+        // return $this->respond($data, 200);exit;
+        return view($page, $data);
     }
     // update penarikan perhari
     public function update_penarikan_perhari(Type $var = null)
@@ -473,12 +475,22 @@ class Unit extends BaseController
         $model_rincian_perhari = new \App\Models\ModelRincianKegiatanPerhari;
         $id_rincian_kegiatan = $this->request->getPost('id_rincian_kegiatan');
         $bulan = $this->request->getPost('bulan');
-        $rincian_perhari = $this->request->getPost('rincian_perhari');
-        $insert = [
-            'id_rincian_kegiatan' => $id_rincian_kegiatan,
-            'bulan' => $bulan,
-            'rincian_perhari' => json_encode($rincian_perhari),
-        ];
+        $status = $this->request->getPost('status');
+        if ($status == 'penarikan') {
+            $rincian_perhari = $this->request->getPost('rincian_perhari');
+            $insert = [
+                'id_rincian_kegiatan' => $id_rincian_kegiatan,
+                'bulan' => $bulan,
+                'rincian_perhari' => json_encode($rincian_perhari),
+            ];
+        } else {
+            $kegiatan_perhari = $this->request->getPost('kegiatan_perhari');
+            $insert = [
+                'id_rincian_kegiatan' => $id_rincian_kegiatan,
+                'bulan' => $bulan,
+                'rincian_kegiatan_perhari' => json_encode($kegiatan_perhari),
+            ];
+        }
         $check = $model_rincian_perhari->asObject()->where('bulan', $bulan)->where('id_rincian_kegiatan', $id_rincian_kegiatan)->first();
         if ($check) {
             $create = $model_rincian_perhari->update($check->id_rincian_kegiatan_perhari, $insert);
@@ -494,6 +506,7 @@ class Unit extends BaseController
         ];
         return $this->respond($response, 200);
     }
+
     public function convert_day_name($day_name)
     {
         switch ($day_name) {

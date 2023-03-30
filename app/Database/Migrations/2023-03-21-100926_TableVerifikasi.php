@@ -25,7 +25,7 @@ class TableVerifikasi extends Migration
             'comment' => [
                 'type' => 'TEXT',
             ],
-            'crated_by' => [
+            'created_by' => [
                 'type' => 'INT',
                 'constraint' => 10,
             ],

@@ -14,7 +14,7 @@ class ModelRincianKegiatanPerhari extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['id_rincian_kegiatan', 'bulan', 'rincian_perhari'];
+    protected $allowedFields = ['id_rincian_kegiatan', 'bulan', 'rincian_perhari', 'rincian_kegiatan_perhari'];
 
     // Dates
     protected $useTimestamps = false;

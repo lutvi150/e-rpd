@@ -33,6 +33,8 @@
 </script>
 <script src="<?=base_url()?>/assets/theme/gentella/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js">
 </script>
+<!-- iCheck -->
+<script src="<?=base_url()?>/assets/theme/gentella/vendors/iCheck/icheck.min.js"></script>
 <!-- Custom Theme Scripts -->
 <script src="<?=base_url()?>/assets/theme/gentella/build/js/custom.min.js"></script>
 <!-- use for chart js -->

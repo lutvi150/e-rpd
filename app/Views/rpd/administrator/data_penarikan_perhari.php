@@ -35,9 +35,9 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="card-box table-responsive">
-                                    <a href="/unit/tambah-penarikan-mingguan/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $rincian_kegiatan->id_rincian?>"
+                                    <a href="/administrator/tambah-penarikan-mingguan/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $rincian_kegiatan->id_rincian?>"
                                         class="btn btn-info btn-xs"><i class="fa fa-reply"></i> Kembali</a>
-                                        <a class="btn btn-success btn-xs" href="/unit/tambah-kegiatan-harian/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $rincian_kegiatan->id_rincian . "/" . $month_number?>"><i class="fa fa-hand-o-up" aria-hidden="true"></i> Kegiatan Harian</a>
+                                        <a class="btn btn-success btn-xs" href="/administrator/tambah-penarikan-harian/<?=$uri->id_lembaga . "/" . $uri->id_kegiatan . "/" . $uri->id_rincian . "/" . $uri->id_rincian_kegiatan_perbulan . "/" . $uri->bulan . "/kegiatan"?>"><i class="fa fa-hand-o-up" aria-hidden="true"></i> Kegiatan Harian</a>
                                     <table class="table table-bordered" id="table-rincian-kegiatan">
                                         <tr>
                                             <td colspan="3">Kementrian Negara/ Lembaga</td>
@@ -119,14 +119,15 @@ $jumlah = 0;foreach ($value as $key3 => $value2): ?>
         $pagu_perhari = $v_penarikan->pagu;
         break;
     }
-}?>
- Rp. <?=number_format($pagu_perhari)?>
+}?> <input readonly type="text"
+class="form-control key_<?=$key?> date_<?=$value2['date']?>"
+data-tanggal="<?=$value2['date']?>" data-pagu="<?=$pagu_perhari?>" value="<?=$pagu_perhari?>">
                                                 <?php else: ?>
                                                 -
                                                 <?php endif;?>
                                             </td>
                                             <?php $jumlah += $pagu_perhari;endforeach;?>
-                                            <td>Rp.<?=number_format($jumlah)?></td>
+                                            <td><?=number_format($jumlah)?></td>
                                             <td></td>
                                         </tr>
                                         <?php endforeach;?>

@@ -132,6 +132,7 @@ class Administrator extends BaseController
         $lembaga = $db->table('table_lembaga as a');
         $data['data_user'] = $user->orderBy('id', 'desc')->where('role', 'unit')->findAll();
         $data['unit'] = $lembaga->join('table_user as b', 'a.id_pengelola=b.id')->get()->getResult();
+        // return $this->respond($data['unit'], 200);exit;
         return view('rpd/administrator/data_unit', $data);
     }
     public function store_data_lembaga(Type $var = null)
@@ -210,7 +211,7 @@ class Administrator extends BaseController
         $data['unit'] = $result_unit;
         // return $this->respond($data, 200);
         // exit;
-        return view('rpd/administrator/data_unit', $data);
+        return view('rpd/administrator/data_rpd', $data);
     }
     // laporan
     public function laporan(Type $var = null)
@@ -294,12 +295,20 @@ class Administrator extends BaseController
         return view('rpd/administrator/data_penarikan_mingguan', $data);
     }
     // penarikan perhari
-    public function tambah_penarikan_perhari($id_lembaga, $id_kegiatan, $id_rincian, $id_rincian_kegiatan_perbulan, $bulan)
+    public function tambah_penarikan_perhari($id_lembaga, $id_kegiatan, $id_rincian, $id_rincian_kegiatan_perbulan, $bulan, $type)
     {
         $unit = new ModelUnit();
         $kegiatan = new ModelKegiatan();
         $rincian_kegiatan = new \App\Models\ModelRincianKegiatan;
         $model_rincian_perhari = new \App\Models\ModelRincianKegiatanPerhari;
+        $data['uri'] = (object) [
+            'id_lembaga' => $id_lembaga,
+            'id_kegiatan' => $id_kegiatan,
+            'id_rincian' => $id_rincian,
+            'id_rincian_kegiatan_perbulan' => $id_rincian_kegiatan_perbulan,
+            'bulan' => $bulan,
+            'type' => $type,
+        ];
         $data['kegiatan'] = $kegiatan->asObject()->find($id_kegiatan);
         $data['lembaga'] = $unit->asObject()->find($id_lembaga);
         $data['rincian_kegiatan'] = $rincian_kegiatan->asObject()->find($id_rincian);
@@ -308,9 +317,22 @@ class Administrator extends BaseController
         $get_date = $this->get_date($bulan);
         $data['day_in_month'] = $get_date['date'];
         $data['day'] = $get_date['day'];
-        $data['penarikan_perhari'] = json_decode($model_rincian_perhari->asObject()->where('bulan', $bulan)->where('id_rincian_kegiatan', $id_rincian)->first()->rincian_perhari);
-        // return $this->respond($data['penarikan_perhari'], 200);
-        return view('rpd/administrator/data_penarikan_perhari', $data);
+        $rincian = $model_rincian_perhari->asObject()->where('bulan', $bulan)->where('id_rincian_kegiatan', $id_rincian)->first();
+        if ($type == 'penarikan') {
+            $page = 'rpd/administrator/data_penarikan_perhari';
+            $data['penarikan_perhari'] = [];
+            if ($rincian->rincian_perhari) {
+                $data['penarikan_perhari'] = json_decode($rincian->rincian_perhari);
+            }
+        } else {
+            $page = 'rpd/administrator/data_kegiatan_harian';
+            $data['kegiatan_perhari'] = [];
+            if ($rincian->rincian_kegiatan_perhari) {
+                $data['kegiatan_perhari'] = json_decode($rincian->rincian_kegiatan_perhari);
+            }
+        }
+        // return $this->respond($data, 200);exit;
+        return view($page, $data);
     }
     // costume bulan
     public function month($status)

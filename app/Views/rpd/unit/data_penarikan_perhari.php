@@ -4,7 +4,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Rencana Penarikan Dana Bulanan </h3>
+                <h3>Rencana Penarikan Dana Harian </h3>
             </div>
         </div>
 
@@ -14,7 +14,7 @@
             <div class="col-md-12 col-sm-12 ">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2>Data : <?=$lembaga->nama_lembaga?></h2>
+                        <h2>Unit/Lembaga : <?=$lembaga->nama_lembaga?></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                             </li>
@@ -37,7 +37,7 @@
                                 <div class="card-box table-responsive">
                                     <a href="/unit/tambah-penarikan-mingguan/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $rincian_kegiatan->id_rincian?>"
                                         class="btn btn-info btn-xs"><i class="fa fa-reply"></i>Kembali</a>
-                                        <a class="btn btn-success btn-xs" href="/unit/tambah-kegiatan-harian/<?=$lembaga->id_lembaga . "/" . $kegiatan->id_kegiatan . "/" . $rincian_kegiatan->id_rincian . "/" . $month_number?>"><i class="fa fa-hand-o-up" aria-hidden="true"></i> Kegiatan Harian</a>
+                                        <a class="btn btn-success btn-xs" href="/unit/tambah-penarikan-harian/<?=$uri->id_lembaga . "/" . $uri->id_kegiatan . "/" . $uri->id_rincian . "/" . $uri->id_rincian_kegiatan_perbulan . "/" . $uri->bulan . "/kegiatan"?>"><i class="fa fa-hand-o-up" aria-hidden="true"></i> Kegiatan Harian</a>
                                     <table class="table table-bordered" id="table-rincian-kegiatan">
                                         <tr>
                                             <td colspan="3">Kementrian Negara/ Lembaga</td>
@@ -176,7 +176,7 @@ $jumlah = 0;foreach ($value as $key3 => $value2): ?>
         $.ajax({
             type: "POST",
             url: base_url + "/unit/api/update-penarikan-perhari",
-            data: {id_rincian_kegiatan:id_rincian,bulan:bulan,rincian_perhari:JSON.parse(sessionStorage.getItem('rincian_perhari'))},
+            data: {id_rincian_kegiatan:id_rincian,bulan:bulan,rincian_perhari:JSON.parse(sessionStorage.getItem('rincian_perhari')),status:'penarikan'},
             dataType: "JSON",
             success: function (response) {},
             error: function () {
