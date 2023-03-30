@@ -71,7 +71,8 @@
                                         <tr class="text-center">
                                             <td></td>
                                             <td></td>
-                                            <?php $jumlah = 0;foreach ($value as $key3 => $value2): ?>
+                                            <?php $check = null;
+$jumlah = 0;foreach ($value as $key3 => $value2): ?>
                                             <td>
                                                 <?php if ($value2['date'] !== '-'): ?>
                                                 <?php foreach ($kegiatan_perhari as $key4 => $v_kegiatan) {
@@ -82,6 +83,7 @@
         }
         break;
     }}?>
+
                                                         <div class="checkbox">
 													<label>
                                                         <?php if ($check == null): ?>
@@ -91,7 +93,6 @@
                                                         <?php endif;?>
 													</label>
 												</div>
-                                                        <?php endif;?>
                                                 <?php else: ?>
                                                 -
                                                 <?php endif;?>

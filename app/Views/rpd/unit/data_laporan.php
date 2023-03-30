@@ -58,7 +58,7 @@
                                             <tr>
                                                 <td><?=$key + 1?></td>
                                                 <td><?=$value->nama_lembaga?></td>
-                                                <td>Rp.0</td>
+                                                <td>Rp.<?=number_format($value->pagu)?></td>
                                                 <td class="text-center" ><a target="_blank" href="" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
                                                 <td class="text-center"><a target="_blank" href="" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>
                                                 <td class="text-center"><a target="_blank" href="" class="btn btn-xs btn-success"><i class="fa fa-print"></i> Cetak</a></td>

@@ -540,7 +540,20 @@ class Unit extends BaseController
     {
         $session = \Config\Services::session();
         $unit = new ModelUnit();
-        $data['unit'] = $unit->where('id_pengelola', $session->get('id'))->findAll();
+        $kegiatan = new ModelKegiatan();
+        $data_unit = $unit->where('status_verifikasi', 3)->where('id_pengelola', $session->get('id'))->findAll();
+        $result_unit = [];
+        if ($data_unit) {
+            foreach ($data_unit as $key => $value) {
+                $pagu = $kegiatan->asObject()->where('id_lembaga', $value->id_lembaga)->selectSum('pagu_kegiatan')->findAll()[0]->pagu_kegiatan;
+                $result_unit[] = (object) [
+                    'id_lembaga' => $value->id_lembaga,
+                    'nama_lembaga' => $value->nama_lembaga,
+                    'pagu' => $pagu,
+                ];
+            }
+        }
+        $data['unit'] = $result_unit;
         // return $this->respond($data, 200);
         return view('rpd/unit/data_laporan', $data);
     }

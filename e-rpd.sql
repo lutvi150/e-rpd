@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.11
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Feb 28, 2023 at 08:48 PM
--- Server version: 10.5.19-MariaDB-cll-lve-log
--- PHP Version: 7.4.33
+-- Host: 127.0.0.1
+-- Generation Time: Mar 30, 2023 at 02:47 PM
+-- Server version: 10.4.27-MariaDB
+-- PHP Version: 8.0.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `teamclov_demo_6`
+-- Database: `e-rpd`
 --
 
 -- --------------------------------------------------------
@@ -52,7 +51,9 @@ INSERT INTO `migrations` (`id`, `version`, `class`, `group`, `namespace`, `time`
 (7, '2022-12-26-115825', 'App\\Database\\Migrations\\TableKalenderHarian', 'default', 'App', 1672063554, 1),
 (8, '2022-12-26-115834', 'App\\Database\\Migrations\\TablePenarikanHarian', 'default', 'App', 1672063554, 1),
 (9, '2023-02-23-074759', 'App\\Database\\Migrations\\TableRincianKegiatanPerbulan', 'default', 'App', 1677138595, 2),
-(10, '2023-02-24-193523', 'App\\Database\\Migrations\\TableRincianPerminggu', 'default', 'App', 1677267442, 3);
+(10, '2023-02-24-193523', 'App\\Database\\Migrations\\TableRincianPerminggu', 'default', 'App', 1677267442, 3),
+(11, '2023-02-26-123638', 'App\\Database\\Migrations\\TableRincianKegiatanPerhari', 'default', 'App', 1679667481, 4),
+(12, '2023-03-21-100926', 'App\\Database\\Migrations\\TableVerifikasi', 'default', 'App', 1679667482, 4);
 
 -- --------------------------------------------------------
 
@@ -79,7 +80,8 @@ INSERT INTO `table_kegiatan` (`id_kegiatan`, `id_lembaga`, `kode_kegiatan`, `ura
 (1, 5, '2131.BGC.002.005.5A', 'Pelaksanaan Audit Internal', 86129000, '2', '12', '2023'),
 (2, 5, '2132.BGC.002.005.5B', 'Bimtek dan Pendidikan Auditor', 118945000, '2', '11', '2023'),
 (3, 5, '2131.BGC.002.005.5C', 'Workshop Penyusunan Pedoman-Pedoman SPI', 8355000, '3', '9', '2023'),
-(4, 5, '2132/BGC.002.055.5D', 'Pelaksanaan Audit Kolaboratif/ Operasional', 12255000, '2', '8', '2023');
+(4, 5, '2132/BGC.002.055.5D', 'Pelaksanaan Audit Kolaboratif/ Operasional', 12255000, '2', '8', '2023'),
+(5, 9, '2132.BGC.002.055SB', 'Bimtek dan Pendidikan Auditor', 118945000, '2', '11', '2023');
 
 -- --------------------------------------------------------
 
@@ -99,9 +101,10 @@ CREATE TABLE `table_lembaga` (
 --
 
 INSERT INTO `table_lembaga` (`id_lembaga`, `nama_lembaga`, `id_pengelola`, `status_verifikasi`) VALUES
-(5, 'Satuan Pengawasan Internal', 2, NULL),
-(6, 'Satuan Pengawasan Internal 2', 2, NULL),
-(8, 'LPM', 6, NULL);
+(5, 'Satuan Pengawasan Internal', 2, '4'),
+(6, 'Satuan Pengawasan Internal 2', 2, '1'),
+(8, 'LPM', 6, '1'),
+(9, 'TIPD', 7, '1');
 
 -- --------------------------------------------------------
 
@@ -124,7 +127,8 @@ CREATE TABLE `table_rincian_kegiatan` (
 INSERT INTO `table_rincian_kegiatan` (`id_rincian`, `id_kegiatan`, `kode_rincian`, `uraian_rincian_kegiatan`, `pagu_rincian_kegiatan`) VALUES
 (1, 1, '521211', 'Belanja Bahan', 8561000),
 (2, 1, '524114', 'Perjalanan Paket Meeting Dalam Kota', 2400000),
-(4, 1, '524119', 'Perjalanan Paket Meeting Luar Kota', 75168000);
+(4, 1, '524119', 'Perjalanan Paket Meeting Luar Kota', 75168000),
+(5, 5, '521119', 'Belanja Barang Operasional Lainnya', 108000);
 
 -- --------------------------------------------------------
 
@@ -174,9 +178,17 @@ INSERT INTO `table_rincian_kegiatan_perbulan` (`id_rincian_kegiatan_perbulan`, `
 (28, 4, 6, 8500000),
 (29, 4, 7, 14500000),
 (30, 4, 8, 22500000),
-(31, 4, 9, 8000000),
+(31, 4, 9, 18000000),
 (32, 4, 10, 6000000),
-(33, 4, 11, 1668000);
+(33, 4, 11, 1668000),
+(34, 5, 2, 26000),
+(35, 5, 3, 14000),
+(36, 5, 4, 10000),
+(37, 5, 6, 15000),
+(38, 5, 7, 23000),
+(39, 5, 8, 10000),
+(40, 5, 9, 10000),
+(41, 4, 12, 0);
 
 -- --------------------------------------------------------
 
@@ -188,15 +200,16 @@ CREATE TABLE `table_rincian_kegiatan_perhari` (
   `id_rincian_kegiatan_perhari` int(5) UNSIGNED NOT NULL,
   `id_rincian_kegiatan` int(11) NOT NULL,
   `bulan` varchar(5) NOT NULL,
-  `rincian_perhari` text NOT NULL
+  `rincian_perhari` text NOT NULL,
+  `rincian_kegiatan_perhari` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `table_rincian_kegiatan_perhari`
 --
 
-INSERT INTO `table_rincian_kegiatan_perhari` (`id_rincian_kegiatan_perhari`, `id_rincian_kegiatan`, `bulan`, `rincian_perhari`) VALUES
-(1, 1, '2', '[{\"date\":\"1\",\"pagu\":\"1000000\"},{\"date\":\"2\",\"pagu\":\"0\"},{\"date\":\"3\",\"pagu\":\"0\"},{\"date\":\"6\",\"pagu\":\"9000\"},{\"date\":\"7\",\"pagu\":\"0\"},{\"date\":\"8\",\"pagu\":\"0\"},{\"date\":\"9\",\"pagu\":\"4000000\"},{\"date\":\"10\",\"pagu\":\"0\"},{\"date\":\"13\",\"pagu\":\"0\"},{\"date\":\"14\",\"pagu\":\"0\"},{\"date\":\"15\",\"pagu\":\"0\"},{\"date\":\"16\",\"pagu\":\"0\"},{\"date\":\"17\",\"pagu\":\"0\"},{\"date\":\"20\",\"pagu\":\"0\"},{\"date\":\"21\",\"pagu\":\"0\"},{\"date\":\"22\",\"pagu\":\"0\"},{\"date\":\"23\",\"pagu\":\"0\"},{\"date\":\"24\",\"pagu\":\"0\"},{\"date\":\"27\",\"pagu\":\"0\"},{\"date\":\"28\",\"pagu\":\"0\"}]');
+INSERT INTO `table_rincian_kegiatan_perhari` (`id_rincian_kegiatan_perhari`, `id_rincian_kegiatan`, `bulan`, `rincian_perhari`, `rincian_kegiatan_perhari`) VALUES
+(1, 1, '2', '[{\"date\":\"1\",\"pagu\":\"1000000\"},{\"date\":\"2\",\"pagu\":\"0\"},{\"date\":\"3\",\"pagu\":\"0\"},{\"date\":\"6\",\"pagu\":\"9000\"},{\"date\":\"7\",\"pagu\":\"0\"},{\"date\":\"8\",\"pagu\":\"0\"},{\"date\":\"9\",\"pagu\":\"4000000\"},{\"date\":\"10\",\"pagu\":\"0\"},{\"date\":\"13\",\"pagu\":\"0\"},{\"date\":\"14\",\"pagu\":\"0\"},{\"date\":\"15\",\"pagu\":\"0\"},{\"date\":\"16\",\"pagu\":\"0\"},{\"date\":\"17\",\"pagu\":\"0\"},{\"date\":\"20\",\"pagu\":\"0\"},{\"date\":\"21\",\"pagu\":\"0\"},{\"date\":\"22\",\"pagu\":\"0\"},{\"date\":\"23\",\"pagu\":\"0\"},{\"date\":\"24\",\"pagu\":\"0\"},{\"date\":\"27\",\"pagu\":\"0\"},{\"date\":\"28\",\"pagu\":\"0\"}]', NULL);
 
 -- --------------------------------------------------------
 
@@ -217,22 +230,29 @@ CREATE TABLE `table_rincian_kegiatan_perminggu` (
 
 INSERT INTO `table_rincian_kegiatan_perminggu` (`id_rincian_kegiatan_perminggu`, `id_rincian_kegiatan_perbulan`, `minggu`, `total_pagu_perminggu`) VALUES
 (1, 6, 1, 0),
-(2, 12, 1, 4651000),
+(2, 12, 1, 4561000),
 (3, 6, 3, 0),
 (4, 6, 2, 4000000),
 (5, 12, 2, 0),
 (6, 12, 3, 0),
-(7, 8, 4, 300),
-(8, 21, 2, 200),
-(9, 23, 2, 300),
-(10, 24, 1, 300),
-(11, 24, 2, 300),
-(12, 25, 1, 300),
-(13, 26, 1, 300),
-(14, 22, 2, 400),
+(7, 8, 4, 300000),
+(8, 21, 2, 200000),
+(9, 23, 2, 300000),
+(10, 24, 1, 300000),
+(11, 24, 2, 300000),
+(12, 25, 1, 300000),
+(13, 26, 1, 300000),
+(14, 22, 2, 400000),
 (15, 6, 4, 0),
 (16, 12, 4, 0),
-(17, 26, 2, 0);
+(17, 26, 2, 0),
+(18, 34, 1, 26000),
+(19, 35, 1, 14000),
+(20, 36, 2, 10000),
+(21, 37, 1, 15000),
+(22, 38, 1, 23000),
+(23, 39, 1, 10000),
+(24, 40, 1, 10000);
 
 -- --------------------------------------------------------
 
@@ -259,10 +279,38 @@ CREATE TABLE `table_user` (
 INSERT INTO `table_user` (`id`, `nama_user`, `email`, `password`, `role`, `last_login`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'Admin', 'admin@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'administrator', '2022-12-26 08:16:10', '2022-12-26 08:16:10', '0000-00-00 00:00:00', NULL),
 (2, 'Budi', 'budi@gmail.com', '48b02c9e85f934696778e9d1e84e697ca1ea6de02e07fc13173c1f1e98bbc60c', 'unit', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
-(3, 'Any', 'Any@gmail.com', '8aebbd3f4c921c9f3f35347a063fbedf8e26d9cdaf4faa8d5ad3eac8fe7cf7ac', 'unit', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
-(4, 'Lara', 'laradev@gmail.com', '6835cfda39794eabd46b121b9a9c824cbfde09684a0afd939d65fb7c5ea1ba30', 'unit', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
+(3, 'Any', 'Any@gmail.com', '8aebbd3f4c921c9f3f35347a063fbedf8e26d9cdaf4faa8d5ad3eac8fe7cf7ac', 'unit', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2023-03-21 22:32:54'),
+(4, 'Lara', 'laradev@gmail.com', '6835cfda39794eabd46b121b9a9c824cbfde09684a0afd939d65fb7c5ea1ba30', 'unit', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2023-03-21 22:33:02'),
 (5, 'Lara tes 2', 'larates2@gmail.com', '6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b', 'unit', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2023-02-23 08:03:26'),
-(6, 'Lisa', 'lpm@gmail.com', '0621abf144d39a66dfd2e152f75491d12d3ea8703e0ad394699384481e5e0290', 'unit', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL);
+(6, 'Lisa', 'lpm@gmail.com', '0621abf144d39a66dfd2e152f75491d12d3ea8703e0ad394699384481e5e0290', 'unit', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
+(7, 'Tedi', 'tipd@gmail.com', '35c249bbc75303bd0e6bb577b3f222471e5ca05312e57e21b67a7c09b75da186', 'unit', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `table_verifikasi`
+--
+
+CREATE TABLE `table_verifikasi` (
+  `id_verifikasi` int(5) UNSIGNED NOT NULL,
+  `id_lembaga` bigint(20) NOT NULL,
+  `status` text NOT NULL,
+  `comment` text NOT NULL,
+  `created_by` int(10) NOT NULL,
+  `created_at` varchar(50) NOT NULL,
+  `updated_at` varchar(50) NOT NULL,
+  `deleted_at` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Dumping data for table `table_verifikasi`
+--
+
+INSERT INTO `table_verifikasi` (`id_verifikasi`, `id_lembaga`, `status`, `comment`, `created_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 5, '2', '-', 2, '2023-03-24 09:21:21', '2023-03-24 09:21:21', ''),
+(2, 5, '4', '<p>ada data kegiatan yang perlu di revisi, cocokan detail kegiatan dengan penarikan mingguan</p>\n', 1, '2023-03-24 09:22:43', '2023-03-24 09:22:43', ''),
+(3, 5, '2', '-', 0, '2023-03-24 09:50:59', '2023-03-24 09:50:59', ''),
+(4, 5, '3', '-', 0, '2023-03-24 09:51:31', '2023-03-24 09:51:31', '');
 
 --
 -- Indexes for dumped tables
@@ -317,6 +365,12 @@ ALTER TABLE `table_user`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `table_verifikasi`
+--
+ALTER TABLE `table_verifikasi`
+  ADD PRIMARY KEY (`id_verifikasi`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -324,31 +378,31 @@ ALTER TABLE `table_user`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `table_kegiatan`
 --
 ALTER TABLE `table_kegiatan`
-  MODIFY `id_kegiatan` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_kegiatan` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `table_lembaga`
 --
 ALTER TABLE `table_lembaga`
-  MODIFY `id_lembaga` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_lembaga` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `table_rincian_kegiatan`
 --
 ALTER TABLE `table_rincian_kegiatan`
-  MODIFY `id_rincian` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_rincian` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `table_rincian_kegiatan_perbulan`
 --
 ALTER TABLE `table_rincian_kegiatan_perbulan`
-  MODIFY `id_rincian_kegiatan_perbulan` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id_rincian_kegiatan_perbulan` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `table_rincian_kegiatan_perhari`
@@ -360,13 +414,19 @@ ALTER TABLE `table_rincian_kegiatan_perhari`
 -- AUTO_INCREMENT for table `table_rincian_kegiatan_perminggu`
 --
 ALTER TABLE `table_rincian_kegiatan_perminggu`
-  MODIFY `id_rincian_kegiatan_perminggu` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_rincian_kegiatan_perminggu` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `table_user`
 --
 ALTER TABLE `table_user`
-  MODIFY `id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `table_verifikasi`
+--
+ALTER TABLE `table_verifikasi`
+  MODIFY `id_verifikasi` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
