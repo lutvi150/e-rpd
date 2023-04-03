@@ -70,7 +70,7 @@ class Controller extends BaseController
             $page = view($get_data['page'], $data);
             $data['data_mingguan'] = $get_data;
         }
-        return $this->respond($data, 200);exit;
+        // return $this->respond($data, 200);exit;
         $mpdf = new \Mpdf\Mpdf(['orientation' => 'L']);
         $mpdf->SetTitle($data['file_name']);
         $mpdf->SetAuthor($data['file_name']);
@@ -135,14 +135,19 @@ class Controller extends BaseController
         // $new_data_month = [];
         $array_mingguan = [];
         if ($data_kegiatan) {
-            foreach ($data_kegiatan as $key => $value) {
-                $data_rincian_kegiatan = $rincian_kegiatan->asObject()->where('id_kegiatan', $value->id_kegiatan)->findAll();
+            foreach ($data_kegiatan as $key => $kegiatan) {
+                $data_rincian_kegiatan = $rincian_kegiatan->asObject()->where('id_kegiatan', $kegiatan->id_kegiatan)->findAll();
                 if ($data_rincian_kegiatan) {
-                    $value->{'rincian_kegiatan'} = $data_rincian_kegiatan;
+                    $array_rincian_kegiatan = [];
+                    foreach ($data_rincian_kegiatan as $key => $rincian_kegiatan) {
+                        $kegiatan_perminggu=$rincian_kegiatan_perminggu->asObject()->where('id_rincian_kegiatan_perbulan',$rincian_kegiatan->id_rincian)
+                        $array_rincian_kegiatan[] = $rincian_kegiatan;
+                    }
+                    $kegiatan->{'rincian_kegiatan'} = $array_rincian_kegiatan;
                 } else {
-                    $value->{'rincian_kegiatan'} = [];
+                    $kegiatan->{'rincian_kegiatan'} = [];
                 }
-                $array_kegiatan[] = $value;
+                $array_kegiatan[] = $kegiatan;
             }
         }
         foreach ($month as $key_month => $value_month) {
