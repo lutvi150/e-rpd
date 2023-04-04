@@ -77,6 +77,10 @@
                                                     <button type="button" class="btn btn-success btn-xs btn-verifikasi"
                                                         data-id="<?=$value->id_lembaga?>"><i class="fa fa-send"></i>
                                                         Validasi Data</button>
+                                                        <?php elseif ($value->status_verifikasi == 3): ?>
+                                                    <button type="button" class="btn btn-danger btn-xs btn-cancel-verifikasi"
+                                                        data-id="<?=$value->id_lembaga?>"><i class="fa fa-ban"></i>
+                                                        Batalkan Verifikasi</button>
                                                     <?php endif;?>
                                                     <a href="<?=base_url('all/history-verifikasi/' . $value->id_lembaga)?>"
                                                         class="btn btn-warning btn-xs"><i class="fa fa-book"></i>
@@ -216,6 +220,42 @@
                     success: function (response) {
                         if (response.status == 'success') {
                             Swal.fire('Data berhasil di verifikasi', '', 'success').then(
+                                () => {
+                                    location.reload();
+                                });
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Something Wrong', '', 'info');
+                    }
+                });
+            } else if (result.isDenied) {
+                sessionStorage.setItem('status', 4)
+                $("#reason-denied").modal("show");
+            }
+        })
+    });
+    $(".btn-cancel-verifikasi").click(function (e) {
+        Swal.fire({
+            title: 'Kamu akan batalkan verifikasi data ini ?',
+            showCancelButton: true,
+            confirmButtonText: 'Ya',
+        }).then((result) => {
+            let id_lembaga = $(this).data('id');
+            sessionStorage.setItem('id_lembaga', id_lembaga)
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url: "<?=base_url('all/api/update-status-verifikasi')?>",
+                    data: {
+                        id_lembaga: id_lembaga,
+                        status: 2,
+                        comment:'Verifikasi dibatalkan admin'
+                    },
+                    dataType: "JSON",
+                    success: function (response) {
+                        if (response.status == 'success') {
+                            Swal.fire('Data verifikasi berhasil di batalkan', '', 'success').then(
                                 () => {
                                     location.reload();
                                 });

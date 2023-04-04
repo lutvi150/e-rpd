@@ -456,15 +456,20 @@ class Unit extends BaseController
         if ($type == 'penarikan') {
             $page = 'rpd/unit/data_penarikan_perhari';
             $data['penarikan_perhari'] = [];
-            if ($rincian->rincian_perhari) {
-                $data['penarikan_perhari'] = json_decode($rincian->rincian_perhari);
+            if ($rincian) {
+                if ($rincian->rincian_perhari) {
+                    $data['penarikan_perhari'] = json_decode($rincian->rincian_perhari);
+                }
             }
         } else {
             $page = 'rpd/unit/data_kegiatan_harian';
             $data['kegiatan_perhari'] = [];
-            if ($rincian->rincian_kegiatan_perhari) {
-                $data['kegiatan_perhari'] = json_decode($rincian->rincian_kegiatan_perhari);
+            if ($rincian) {
+                if ($rincian->rincian_kegiatan_perhari) {
+                    $data['kegiatan_perhari'] = json_decode($rincian->rincian_kegiatan_perhari);
+                }
             }
+
         }
         // return $this->respond($data, 200);exit;
         return view($page, $data);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2023 at 02:47 PM
+-- Generation Time: Apr 05, 2023 at 01:39 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -101,8 +101,7 @@ CREATE TABLE `table_lembaga` (
 --
 
 INSERT INTO `table_lembaga` (`id_lembaga`, `nama_lembaga`, `id_pengelola`, `status_verifikasi`) VALUES
-(5, 'Satuan Pengawasan Internal', 2, '4'),
-(6, 'Satuan Pengawasan Internal 2', 2, '1'),
+(5, 'Satuan Pengawasan Internal', 2, '3'),
 (8, 'LPM', 6, '1'),
 (9, 'TIPD', 7, '1');
 
@@ -209,7 +208,7 @@ CREATE TABLE `table_rincian_kegiatan_perhari` (
 --
 
 INSERT INTO `table_rincian_kegiatan_perhari` (`id_rincian_kegiatan_perhari`, `id_rincian_kegiatan`, `bulan`, `rincian_perhari`, `rincian_kegiatan_perhari`) VALUES
-(1, 1, '2', '[{\"date\":\"1\",\"pagu\":\"1000000\"},{\"date\":\"2\",\"pagu\":\"0\"},{\"date\":\"3\",\"pagu\":\"0\"},{\"date\":\"6\",\"pagu\":\"9000\"},{\"date\":\"7\",\"pagu\":\"0\"},{\"date\":\"8\",\"pagu\":\"0\"},{\"date\":\"9\",\"pagu\":\"4000000\"},{\"date\":\"10\",\"pagu\":\"0\"},{\"date\":\"13\",\"pagu\":\"0\"},{\"date\":\"14\",\"pagu\":\"0\"},{\"date\":\"15\",\"pagu\":\"0\"},{\"date\":\"16\",\"pagu\":\"0\"},{\"date\":\"17\",\"pagu\":\"0\"},{\"date\":\"20\",\"pagu\":\"0\"},{\"date\":\"21\",\"pagu\":\"0\"},{\"date\":\"22\",\"pagu\":\"0\"},{\"date\":\"23\",\"pagu\":\"0\"},{\"date\":\"24\",\"pagu\":\"0\"},{\"date\":\"27\",\"pagu\":\"0\"},{\"date\":\"28\",\"pagu\":\"0\"}]', NULL);
+(1, 1, '2', '[{\"date\":\"1\",\"pagu\":\"1000000\"},{\"date\":\"2\",\"pagu\":\"0\"},{\"date\":\"3\",\"pagu\":\"0\"},{\"date\":\"6\",\"pagu\":\"9000\"},{\"date\":\"7\",\"pagu\":\"0\"},{\"date\":\"8\",\"pagu\":\"0\"},{\"date\":\"9\",\"pagu\":\"4000000\"},{\"date\":\"10\",\"pagu\":\"0\"},{\"date\":\"13\",\"pagu\":\"0\"},{\"date\":\"14\",\"pagu\":\"0\"},{\"date\":\"15\",\"pagu\":\"0\"},{\"date\":\"16\",\"pagu\":\"0\"},{\"date\":\"17\",\"pagu\":\"0\"},{\"date\":\"20\",\"pagu\":\"0\"},{\"date\":\"21\",\"pagu\":\"0\"},{\"date\":\"22\",\"pagu\":\"0\"},{\"date\":\"23\",\"pagu\":\"0\"},{\"date\":\"24\",\"pagu\":\"0\"},{\"date\":\"27\",\"pagu\":\"0\"},{\"date\":\"28\",\"pagu\":\"0\"}]', '[{\"date\":\"1\",\"status\":\"0\"},{\"date\":\"2\",\"status\":\"0\"},{\"date\":\"3\",\"status\":\"0\"},{\"date\":\"6\",\"status\":\"0\"},{\"date\":\"7\",\"status\":\"1\"},{\"date\":\"8\",\"status\":\"0\"},{\"date\":\"9\",\"status\":\"1\"},{\"date\":\"10\",\"status\":\"0\"},{\"date\":\"13\",\"status\":\"0\"},{\"date\":\"14\",\"status\":\"0\"},{\"date\":\"15\",\"status\":\"1\"},{\"date\":\"16\",\"status\":\"0\"},{\"date\":\"17\",\"status\":\"0\"},{\"date\":\"20\",\"status\":\"1\"},{\"date\":\"21\",\"status\":\"0\"},{\"date\":\"22\",\"status\":\"0\"},{\"date\":\"23\",\"status\":\"0\"},{\"date\":\"24\",\"status\":\"0\"},{\"date\":\"27\",\"status\":\"0\"},{\"date\":\"28\",\"status\":\"0\"}]');
 
 -- --------------------------------------------------------
 
@@ -309,8 +308,10 @@ CREATE TABLE `table_verifikasi` (
 INSERT INTO `table_verifikasi` (`id_verifikasi`, `id_lembaga`, `status`, `comment`, `created_by`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 5, '2', '-', 2, '2023-03-24 09:21:21', '2023-03-24 09:21:21', ''),
 (2, 5, '4', '<p>ada data kegiatan yang perlu di revisi, cocokan detail kegiatan dengan penarikan mingguan</p>\n', 1, '2023-03-24 09:22:43', '2023-03-24 09:22:43', ''),
-(3, 5, '2', '-', 0, '2023-03-24 09:50:59', '2023-03-24 09:50:59', ''),
-(4, 5, '3', '-', 0, '2023-03-24 09:51:31', '2023-03-24 09:51:31', '');
+(3, 5, '2', '-', 2, '2023-03-24 09:50:59', '2023-03-24 09:50:59', ''),
+(4, 5, '3', '-', 1, '2023-03-24 09:51:31', '2023-03-24 09:51:31', ''),
+(5, 5, '2', '-', 2, '2023-03-30 08:05:04', '2023-03-30 08:05:04', ''),
+(6, 5, '3', '-', 1, '2023-03-30 08:06:09', '2023-03-30 08:06:09', '');
 
 --
 -- Indexes for dumped tables
@@ -426,7 +427,7 @@ ALTER TABLE `table_user`
 -- AUTO_INCREMENT for table `table_verifikasi`
 --
 ALTER TABLE `table_verifikasi`
-  MODIFY `id_verifikasi` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_verifikasi` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

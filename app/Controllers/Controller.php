@@ -139,9 +139,9 @@ class Controller extends BaseController
                 $data_rincian_kegiatan = $rincian_kegiatan->asObject()->where('id_kegiatan', $kegiatan->id_kegiatan)->findAll();
                 if ($data_rincian_kegiatan) {
                     $array_rincian_kegiatan = [];
-                    foreach ($data_rincian_kegiatan as $key => $rincian_kegiatan) {
-                        $kegiatan_perminggu=$rincian_kegiatan_perminggu->asObject()->where('id_rincian_kegiatan_perbulan',$rincian_kegiatan->id_rincian)
-                        $array_rincian_kegiatan[] = $rincian_kegiatan;
+                    foreach ($data_rincian_kegiatan as $key => $rinciankegiatan) {
+                        $kegiatan_perminggu = $rincian_kegiatan_perminggu->asObject()->where('id_rincian_kegiatan_perbulan', $rinciankegiatan->id_rincian);
+                        $array_rincian_kegiatan[] = $rinciankegiatan;
                     }
                     $kegiatan->{'rincian_kegiatan'} = $array_rincian_kegiatan;
                 } else {
