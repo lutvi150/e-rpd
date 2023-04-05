@@ -60,16 +60,20 @@ class Controller extends BaseController
             $get_data = $this->report_kegiatan($id_lembaga);
             $data['month'] = $this->month('get');
             $data['activity'] = $get_data['activity'];
-            $page = view($get_data['page'], $data);
         } elseif ($type == 'bulanan') {
             $get_data = $this->report_bulanan($id_lembaga);
             $data['data_bulanan'] = $get_data;
-            $page = view($get_data['page'], $data);
         } elseif ($type == 'mingguan') {
             $get_data = $this->report_mingguan($id_lembaga);
             $data['data_mingguan'] = $get_data;
-            $page = view($get_data['page'], $data);
+        } elseif ($type == 'kalender_kegiatan') {
+            $get_data = $this->report_kaleder_kegiatan($id_lembaga);
+            $data['kalender'] = $get_data;
+        } elseif ($type == 'penarikan_harian') {
+            $get_data = $this->report_penarikan_harian($id_lembaga);
+            $data['penarikan'] = $get_data;
         }
+        $page = view($get_data['page'], $data);
         // return $this->respond($data, 200);exit;
         $mpdf = new \Mpdf\Mpdf(['orientation' => 'L']);
         $mpdf->SetTitle($data['file_name']);
@@ -176,6 +180,45 @@ class Controller extends BaseController
             //     $value_month->{'kegiatan'} = $array_kegiatan;
             //     $new_data_month[] = $value_month;
             // }
+
+        }
+        $data['mingguan'] = $array_mingguan;
+        // $data['month'] = $month;
+        // $data['new_month'] = $new_data_month;
+        return $data;
+    }
+    public function report_kaleder_kegiatan($id_lembaga)
+    {
+        $data['page'] = 'report/report_kalender_kegiatan';
+        $month = $this->month('convert');
+        $kegiatan = new ModelKegiatan();
+        $unit = new ModelUnit();
+        $rincian_kegiatan = new ModelRincianKegiatan();
+        $rincian_kegiatan_perbulan = new ModelRincianKegiatanPerbulan();
+        $rincian_kegiatan_perminggu = new ModelRincianKegiatanPerminggu();
+        $data_kegiatan = $kegiatan->asObject()->findAll();
+        $array_kegiatan = [];
+        // $new_data_month = [];
+        $array_mingguan = [];
+        if ($data_kegiatan) {
+            foreach ($data_kegiatan as $key => $kegiatan) {
+                $data_rincian_kegiatan = $rincian_kegiatan->asObject()->where('id_kegiatan', $kegiatan->id_kegiatan)->findAll();
+                if ($data_rincian_kegiatan) {
+                    $array_rincian_kegiatan = [];
+                    foreach ($data_rincian_kegiatan as $key => $rinciankegiatan) {
+                        $kegiatan_perminggu = $rincian_kegiatan_perminggu->asObject()->where('id_rincian_kegiatan_perbulan', $rinciankegiatan->id_rincian);
+                        $array_rincian_kegiatan[] = $rinciankegiatan;
+                    }
+                    $kegiatan->{'rincian_kegiatan'} = $array_rincian_kegiatan;
+                } else {
+                    $kegiatan->{'rincian_kegiatan'} = [];
+                }
+                $array_kegiatan[] = $kegiatan;
+            }
+        }
+        foreach ($month as $key_month => $value_month) {
+            $value_month->{'kegiatan'} = $array_kegiatan;
+            $array_mingguan[] = $value_month;
 
         }
         $data['mingguan'] = $array_mingguan;
