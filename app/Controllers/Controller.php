@@ -67,8 +67,8 @@ class Controller extends BaseController
             $page = view($get_data['page'], $data);
         } elseif ($type == 'mingguan') {
             $get_data = $this->report_mingguan($id_lembaga);
-            $page = view($get_data['page'], $data);
             $data['data_mingguan'] = $get_data;
+            $page = view($get_data['page'], $data);
         }
         // return $this->respond($data, 200);exit;
         $mpdf = new \Mpdf\Mpdf(['orientation' => 'L']);
@@ -151,6 +151,7 @@ class Controller extends BaseController
             }
         }
         foreach ($month as $key_month => $value_month) {
+            $value_month->{'kegiatan'} = $array_kegiatan;
             $array_mingguan[] = $value_month;
             // if ($data_kegiatan) {
             //     foreach ($data_kegiatan as $key => $value) {
@@ -177,7 +178,6 @@ class Controller extends BaseController
             // }
 
         }
-        $data['kegiatan'] = $array_kegiatan;
         $data['mingguan'] = $array_mingguan;
         // $data['month'] = $month;
         // $data['new_month'] = $new_data_month;
