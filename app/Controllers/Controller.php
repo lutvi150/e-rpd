@@ -226,6 +226,26 @@ class Controller extends BaseController
         // $data['new_month'] = $new_data_month;
         return $data;
     }
+    public function report_penarikan_harian($id_lembaga)
+    {
+        $data['page'] = 'report/report_penarikan_harian';
+        $month = $this->month('convert');
+        $kegiatan = new ModelKegiatan();
+        $unit = new ModelUnit();
+        $rincian_kegiatan = new ModelRincianKegiatan();
+        $rincian_kegiatan_perbulan = new ModelRincianKegiatanPerbulan();
+        $rincian_kegiatan_perminggu = new ModelRincianKegiatanPerminggu();
+        $array_kegiatan = [];
+        $data_kegiatan = $kegiatan->asObject()->where('id_lembaga', $id_lembaga)->findAll();
+        if ($data_kegiatan) {
+            foreach ($data_kegiatan as $key => $result_kegiatan) {
+                $result_kegiatan->{'month'} = $this->month('convert');
+                $array_kegiatan[] = $result_kegiatan;
+            }
+        }
+        $data['kegiatan'] = $array_kegiatan;
+        return $data;
+    }
     // costume bulan
     public function month($status)
     {
