@@ -60,8 +60,10 @@
                                                 <td><?=$value->role?></td>
                                                 <td><?=$value->created_at?></td>
                                                 <td>
-                                                    <button type="button" onclick="delete_data(<?=$value->id?>)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i><?=$value->id?></button>
+                                                    <?php if ($value->role == 'unit'): ?>
+                                                    <button type="button" onclick="delete_data(<?=$value->id?>)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                                                     <button onclick="edit_data(<?=$value->id?>)" class="btn btn-warning btn-xs" type="button"><i class="fa fa-edit"></i></button>
+                                                    <?php endif;?>
                                                 </td>
                                             </tr>
                                             <?php endforeach;?>
