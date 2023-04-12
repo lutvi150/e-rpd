@@ -44,15 +44,21 @@
                                                 <th style="width:1%">No.</th>
                                                 <th>Nama</th>
                                                 <th>Email</th>
+                                                <th>Nama Unit</th>
+                                                <th>Nama Level</th>
+                                                <th>Created</th>
                                                 <th style="width:10%">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php foreach ($data_user as $key => $value): ?>
                                             <tr>
-                                                <td><?=$key+1?></td>
+                                                <td><?=$key + 1?></td>
                                                 <td><?=$value->nama_user?></td>
                                                 <td><?=$value->email?></td>
+                                                <td><?=$value->nama_lembaga?></td>
+                                                <td><?=$value->role?></td>
+                                                <td><?=$value->created_at?></td>
                                                 <td>
                                                     <button type="button" onclick="delete_data(<?=$value->id?>)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                                                     <button onclick="edit_data(<?=$value->id?>)" class="btn btn-warning btn-xs" type="button"><i class="fa fa-edit"></i></button>
@@ -96,12 +102,22 @@
                   <input type="email" name="email" id="email"  class="form-control" placeholder="" aria-describedby="helpId">
                   <small id="helpId" class="text-error eemail"></small>
                 </div>
+                <div class="form-group">
+                  <label for="">Nama Lembaga</label>
+                  <select name="nama_lembaga" class="form-control" id="nama_lembaga">
+                    <?php foreach ($lembaga as $key => $value): ?>
+                    <option value="<?=$value->id_lembaga?>"><?=$value->nama_lembaga?></option>
+                    <?php endforeach;?>
+                  </select>
+                  <small id="helpId" class="text-error eemail"></small>
+                </div>
                 <div class="form-group show-password" hidden >
                     <label for="">Password</label>
                     <input type="password" name="password" id="password" class="form-control" placeholder="" aria-describedby="helpId">
                     <small id="helpId" class="" style="color: red;">Jika ingin ubah password masukkan password disini, jika tidak cukup kosongkan</small>
                   </div>
-                  
+
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -123,7 +139,7 @@
         $("#form-user").attr("action",'/administrator/api/save-data-user/store')
     }
     edit_data = (id) => {
-        
+
         $(".show-password").removeAttr('hidden');
         $("input[name='email']").attr('disabled',true);
         sessionStorage.setItem('id_user', id);
@@ -135,8 +151,15 @@
             },
             dataType: "JSON",
             success: function (response) {
-                $("input[name='nama']").val(response.nama_user);
-                $("input[name='email']").val(response.email);
+                let html="";
+                let status="";
+                $.each(response.lembaga, function (indexInArray, valueOfElement) {
+                    status=valueOfElement.id_pengelola==sessionStorage.getItem('id_user')?"selected":"";
+                    html+=`<option ${status} value="${valueOfElement.id_lembaga}">${valueOfElement.nama_lembaga}</option>`;
+                });
+                $("#nama_lembaga").html(html);
+                $("input[name='nama']").val(response.user.nama_user);
+                $("input[name='email']").val(response.user.email);
                 $("#form-user").attr("action", "/administrator/api/save-data-user/update");
                 $("#add-user").modal("show");
             },

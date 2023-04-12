@@ -78,7 +78,7 @@ class Controller extends BaseController
         $mpdf = new \Mpdf\Mpdf(['orientation' => 'L']);
         $mpdf->SetTitle($data['file_name']);
         $mpdf->SetAuthor($data['file_name']);
-        $mpdf->SetCreator('IAIN Batusangkar');
+        $mpdf->SetCreator('UIN MY Batusangkar');
         $mpdf->SetDisplayMode('fullpage');
         // $mpdf->SetWatermarkText($data['file_name']);
         $mpdf->showWatermarkText = true;

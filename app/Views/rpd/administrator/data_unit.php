@@ -54,8 +54,6 @@
                                             <tr>
                                                 <td><?=$key + 1?></td>
                                                 <td><?=$value->nama_lembaga?></td>
-                                                <!-- <td><?=$value->nama_user?></td>
-                                                <td><?=$value->email?></td> -->
                                                 <td>
                                                     <button type="button"
                                                         onclick="delete_data(<?=$value->id_lembaga?>)"
@@ -92,15 +90,6 @@
                         <input type="text" name="nama_lembaga" id="nama" class="form-control" placeholder=""
                             aria-describedby="helpId">
                         <small id="helpId" class="text-error enama_lembaga"></small>
-                    </div>
-                    <div class="form-group">
-                        <label for="">Pengelola</label>
-                        <select name="id_pengelola" class="form-control" id="id_pengelola">
-                            <?php foreach ($data_user as $key => $value): ?>
-                            <option value="<?=$value->id?>"><?=$value->nama_user?></option>
-                            <?php endforeach;?>
-                        </select>
-                        <small id="helpId" class="text-error eemail"></small>
                     </div>
                 </div>
                 <div class="modal-footer">

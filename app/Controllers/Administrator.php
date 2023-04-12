@@ -23,8 +23,12 @@ class Administrator extends BaseController
     }
     public function data_user(Type $var = null)
     {
-        $user = new ModelUser();
-        $data['data_user'] = $user->orderBy('id', 'desc')->where('role', 'unit')->findAll();
+        $db = \Config\Database::connect();
+        $lembaga = new ModelUnit();
+        $data['lembaga'] = $lembaga->findAll();
+        $user = $db->table('table_user as a');
+        $data['data_user'] = $user->join('table_lembaga as b', 'a.id=b.id_pengelola', 'left')->orderBy('a.id', 'desc')->get()->getResult();
+        // return $this->respond($data, 200);exit;
         return view('rpd/administrator/data_user', $data);
     }
     public function store_data_user($status)
@@ -64,9 +68,11 @@ class Administrator extends BaseController
         } else {
 
             $user = new ModelUser();
+            $unit = new ModelUnit();
             $email = $this->request->getPost('email');
             $nama = $this->request->getPost('nama');
             $password = $this->request->getPost('password');
+            $nama_lembaga = $this->request->getPost('nama_lembaga');
             $insert = [
                 'email' => $email,
                 'nama_user' => $nama,
@@ -82,12 +88,14 @@ class Administrator extends BaseController
             }
             if ($status == 'store') {
                 $make_data = $user->insert($insert);
+                $id = $user->insertID;
                 $msg = "Data user berhasil di tambahkan";
             } else {
                 $id = $this->request->getPost('id');
                 $make_data = $user->update($id, $insert);
                 $msg = 'Data user berhasil di perbarui';
             }
+            $unit->update($nama_lembaga, ['id_pengelola' => $id]);
             $response = [
                 'status' => 'success',
                 'msg' => $msg,
@@ -100,8 +108,10 @@ class Administrator extends BaseController
     public function edit_data_user(Type $var = null)
     {
         $user = new ModelUser();
+        $unit = new ModelUnit();
         $id_user = $this->request->getPost('id_user');
-        $data = $user->find($id_user);
+        $data['user'] = $user->find($id_user);
+        $data['lembaga'] = $unit->findAll();
         return $this->respond($data, 200);
     }
     // delet data user
@@ -130,8 +140,8 @@ class Administrator extends BaseController
         $db = \Config\Database::connect();
         $user = new ModelUser();
         $lembaga = $db->table('table_lembaga as a');
-        $data['data_user'] = $user->orderBy('id', 'desc')->where('role', 'unit')->findAll();
-        $data['unit'] = $lembaga->join('table_user as b', 'a.id_pengelola=b.id')->get()->getResult();
+        // $data['data_user'] = $user->orderBy('id', 'desc')->where('role', 'unit')->findAll();
+        $data['unit'] = $lembaga->get()->getResult();
         // return $this->respond($data['unit'], 200);exit;
         return view('rpd/administrator/data_unit', $data);
     }
@@ -161,7 +171,7 @@ class Administrator extends BaseController
             $id_pengelola = $this->request->getPost('id_pengelola');
             $insert = [
                 'nama_lembaga' => $nama_lembaga,
-                'id_pengelola' => $id_pengelola,
+                'id_pengelola' => 0,
                 'status_verifikasi' => 1,
             ];
 

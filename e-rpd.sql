@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 05, 2023 at 01:39 AM
+-- Generation Time: Apr 12, 2023 at 03:12 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.0.25
 
@@ -103,7 +103,7 @@ CREATE TABLE `table_lembaga` (
 INSERT INTO `table_lembaga` (`id_lembaga`, `nama_lembaga`, `id_pengelola`, `status_verifikasi`) VALUES
 (5, 'Satuan Pengawasan Internal', 2, '3'),
 (8, 'LPM', 6, '1'),
-(9, 'TIPD', 7, '1');
+(9, 'TIPD', 7, '4');
 
 -- --------------------------------------------------------
 
@@ -251,7 +251,10 @@ INSERT INTO `table_rincian_kegiatan_perminggu` (`id_rincian_kegiatan_perminggu`,
 (21, 37, 1, 15000),
 (22, 38, 1, 23000),
 (23, 39, 1, 10000),
-(24, 40, 1, 10000);
+(24, 40, 1, 10000),
+(25, 37, 2, 0),
+(26, 38, 2, 0),
+(27, 39, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -311,7 +314,17 @@ INSERT INTO `table_verifikasi` (`id_verifikasi`, `id_lembaga`, `status`, `commen
 (3, 5, '2', '-', 2, '2023-03-24 09:50:59', '2023-03-24 09:50:59', ''),
 (4, 5, '3', '-', 1, '2023-03-24 09:51:31', '2023-03-24 09:51:31', ''),
 (5, 5, '2', '-', 2, '2023-03-30 08:05:04', '2023-03-30 08:05:04', ''),
-(6, 5, '3', '-', 1, '2023-03-30 08:06:09', '2023-03-30 08:06:09', '');
+(6, 5, '3', '-', 1, '2023-03-30 08:06:09', '2023-03-30 08:06:09', ''),
+(7, 5, '2', 'Verifikasi dibatalkan admin', 1, '2023-04-04 20:05:05', '2023-04-04 20:05:05', ''),
+(8, 5, '3', '-', 1, '2023-04-04 20:41:20', '2023-04-04 20:41:20', ''),
+(9, 5, '2', 'Verifikasi dibatalkan admin', 1, '2023-04-04 20:42:34', '2023-04-04 20:42:34', ''),
+(10, 5, '4', '<p>Perbaiki rincian data</p>\n', 1, '2023-04-04 20:42:59', '2023-04-04 20:42:59', ''),
+(11, 9, '2', '-', 7, '2023-04-04 20:44:18', '2023-04-04 20:44:18', ''),
+(12, 9, '3', '-', 1, '2023-04-09 23:38:46', '2023-04-09 23:38:46', ''),
+(13, 9, '2', 'Verifikasi dibatalkan admin', 1, '2023-04-09 23:39:24', '2023-04-09 23:39:24', ''),
+(14, 9, '4', '<p>perbaiki</p>\n', 1, '2023-04-09 23:39:52', '2023-04-09 23:39:52', ''),
+(15, 5, '2', '-', 2, '2023-04-09 23:46:03', '2023-04-09 23:46:03', ''),
+(16, 5, '3', '-', 1, '2023-04-09 23:46:37', '2023-04-09 23:46:37', '');
 
 --
 -- Indexes for dumped tables
@@ -415,7 +428,7 @@ ALTER TABLE `table_rincian_kegiatan_perhari`
 -- AUTO_INCREMENT for table `table_rincian_kegiatan_perminggu`
 --
 ALTER TABLE `table_rincian_kegiatan_perminggu`
-  MODIFY `id_rincian_kegiatan_perminggu` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_rincian_kegiatan_perminggu` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `table_user`
@@ -427,7 +440,7 @@ ALTER TABLE `table_user`
 -- AUTO_INCREMENT for table `table_verifikasi`
 --
 ALTER TABLE `table_verifikasi`
-  MODIFY `id_verifikasi` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_verifikasi` int(5) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

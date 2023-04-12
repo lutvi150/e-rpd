@@ -43,7 +43,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="2">Satuan Kerja</td>
-                                            <td colspan="3">: IAIN Batusangkar</td>
+                                            <td colspan="3">: UIN MY Batusangkar</td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">Fak/PPs/Lembaga/Unit</td>

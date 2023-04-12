@@ -17,7 +17,7 @@ class ModelUser extends Model
     protected $allowedFields = ['nama_user', 'email', 'password', 'role', 'last_login'];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat = 'datetime';
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';

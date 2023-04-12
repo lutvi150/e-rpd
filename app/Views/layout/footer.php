@@ -1,6 +1,6 @@
 <footer>
                 <div class="pull-right">
-                    Design by <a href="#">IAIN Batusangkar</a>
+                    Design by <a href="#">UIN MY Batusangkar</a>
                 </div>
                 <div class="clearfix"></div>
             </footer>
