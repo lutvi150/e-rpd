@@ -27,7 +27,7 @@ class Administrator extends BaseController
         $lembaga = new ModelUnit();
         $data['lembaga'] = $lembaga->findAll();
         $user = $db->table('table_user as a');
-        $data['data_user'] = $user->join('table_lembaga as b', 'a.id=b.id_pengelola', 'left')->orderBy('a.id', 'desc')->get()->getResult();
+        $data['data_user'] = $user->join('table_lembaga as b', 'a.id=b.id_pengelola', 'left')->where('deleted_at', null)->orderBy('a.id', 'desc')->get()->getResult();
         // return $this->respond($data, 200);exit;
         return view('rpd/administrator/data_user', $data);
     }
