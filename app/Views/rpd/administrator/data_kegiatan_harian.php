@@ -4,7 +4,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Rencana Kegiatan Harian</h3>
+                <h3>Kalender Kegiatan Harian</h3>
             </div>
         </div>
 

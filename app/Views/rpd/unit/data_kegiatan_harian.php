@@ -4,7 +4,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Rencana Kegiatan Harian</h3>
+                <h3>Kalender Kegiatan Harian</h3>
             </div>
         </div>
 
@@ -55,7 +55,7 @@
                                         <?php foreach ($day_in_month as $key => $value): ?>
                                         <tr class="text-center">
                                             <?php if ($key == 1): ?>
-                                            <td style="text-align: right;"><?=$rincian_kegiatan->kode_rincian;?></td>
+                                            <!-- <td style="text-align: right;"><?=$rincian_kegiatan->kode_rincian;?></td> -->
                                             <td style="text-align: left;">`<?=$rincian_kegiatan->uraian_rincian_kegiatan?></td>
                                             <?php elseif ($key == 0): ?>
                                             <td></td>
@@ -69,7 +69,7 @@
                                             <?php endforeach;?>
                                         </tr>
                                         <tr class="text-center">
-                                            <td></td>
+                                            <!-- <td></td> -->
                                             <td></td>
                                             <?php $check = null;
 $jumlah = 0;foreach ($value as $key3 => $value2): ?>

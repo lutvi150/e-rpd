@@ -138,7 +138,6 @@ class Administrator extends BaseController
     public function data_unit(Type $var = null)
     {
         $db = \Config\Database::connect();
-        $user = new ModelUser();
         $lembaga = $db->table('table_lembaga as a');
         // $data['data_user'] = $user->orderBy('id', 'desc')->where('role', 'unit')->findAll();
         $data['unit'] = $lembaga->get()->getResult();
