@@ -4,7 +4,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-                <h3>Data Kegiatan Unit/ Lembaga </h3>
+                <h3>Data Rincian Kegiatan Unit/ Lembaga </h3>
             </div>
         </div>
 

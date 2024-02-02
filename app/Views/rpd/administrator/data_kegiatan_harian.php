@@ -41,10 +41,10 @@
                                         <a class="btn btn-success btn-xs" href="/unit/tambah-penarikan-harian/<?=$uri->id_lembaga . "/" . $uri->id_kegiatan . "/" . $uri->id_rincian . "/" . $uri->id_rincian_kegiatan_perbulan . "/" . $uri->bulan . "/penarikan"?>"><i class="fa fa-hand-o-up" aria-hidden="true"></i> Rencana Penarikan Dana Harian</a>
                                     <table class="table table-bordered" id="table-rincian-kegiatan">
                                         <tr>
-                                            <td colspan="17" style="font-weight: bold;text-align:center;">Bulan :<?=$month->long_month?> Tahun Anggaran <?=date('Y')?></td>
+                                            <td colspan="17" style="fon t-weight: bold;text-align:center;">Bulan :<?=$month->long_month?> Tahun Anggaran <?=date('Y')?></td>
                                         </tr>
                                         <tr style="background-color: rgb(130, 230, 137);text-align: center;">
-                                            <td></td>
+                                            <td>Kode Kegiatan</td>
                                             <td>Uraian</td>
                                             <td>Senin</td>
                                             <td>Selasa</td>
